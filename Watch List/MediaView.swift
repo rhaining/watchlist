@@ -15,6 +15,13 @@ struct MediaView: View {
     @State private var exposeFullOverview = false
     @State private var mediaState: MediaState?
     
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .none
+        return df
+    }()
+    
     var body: some View {
         ScrollView {
             HStack {
@@ -54,6 +61,11 @@ struct MediaView: View {
                 }
                 .onTapGesture { exposeFullOverview = !exposeFullOverview }
                 .padding(.horizontal)
+            }
+            
+            if let watchedAt = media.watchedAt {
+                Text("Watched on: " + dateFormatter.string(from: watchedAt))
+                    .padding()
             }
             
             HStack {
