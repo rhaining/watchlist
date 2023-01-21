@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
-    @State private var presentedMedia: [Media] = []
+    @State private var presentedMedia: [[Media]] = [[], [], []]
     
     var selectionBinding: Binding<Int> { Binding(
         get: {
@@ -18,7 +18,7 @@ struct ContentView: View {
         set: {
             if $0 == self.selectedTab  && presentedMedia.count > 0 {
                 // Pop back to root.
-                presentedMedia = []
+                presentedMedia[$0] = []
             }
             self.selectedTab = $0
         }
@@ -26,7 +26,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: selectionBinding) {
-            NavigationStack(path: $presentedMedia) {
+            NavigationStack(path: $presentedMedia[0]) {
                 MediaListView(mediaState: .watchlist)
             }
             .tabItem {
@@ -35,7 +35,7 @@ struct ContentView: View {
             }
             .tag(0)
             
-            NavigationStack(path: $presentedMedia) {
+            NavigationStack(path: $presentedMedia[1]) {
                 MediaListView(mediaState: .watched)
             }
             .tabItem {
@@ -44,7 +44,7 @@ struct ContentView: View {
             }
             .tag(1)
             
-            NavigationStack(path: $presentedMedia) {
+            NavigationStack(path: $presentedMedia[2]) {
                 SearchView()
             }
             .tabItem {
