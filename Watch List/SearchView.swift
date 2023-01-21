@@ -24,7 +24,7 @@ struct SearchView: View {
                 if media.count > 0 {
                     LazyVGrid(columns: columns, spacing: 10){
                         ForEach(media, id: \.id){ m in
-                            NavigationLink(destination: MediaView(media: m)) {
+                            NavigationLink(value: m) {
                                 VStack {
                                     if let posterUrl = m.posterUrl {
                                         AsyncImage(url: posterUrl){ image in
@@ -48,6 +48,9 @@ struct SearchView: View {
                         .padding()
                 }
             }
+        }
+        .navigationDestination(for: Media.self) { m in
+            MediaView(media: m)
         }
         .searchable(text: $queryString, placement: .toolbar)
         .onChange(of: queryString, perform: {searchText in searchContent()})
@@ -75,11 +78,15 @@ struct SearchView: View {
             isLoading = true
             task = URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
                 guard let data = data else { return }
-                let mediaReponse = try? JSONDecoder().decode(MediaResponse.self, from: data)
-                self.media = mediaReponse?.results.filter({ m in
-                    return (m.media_type == "movie" ||
-                            m.media_type == "tv") && (m.title != nil || m.name != nil)
-                });
+                do {
+                    let mediaReponse = try JSONDecoder().decode(MediaResponse.self, from: data)
+                    self.media = mediaReponse.results.filter({ m in
+                        return (m.media_type == .movie ||
+                                m.media_type == .tv) && (m.title != nil || m.name != nil)
+                    });
+                } catch {
+                    NSLog("error decoding \(error)")
+                }
                 isLoading = false
                 self.task = nil;
             }
@@ -90,7 +97,7 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             SearchView()
         }
     }

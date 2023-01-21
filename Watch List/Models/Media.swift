@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Media: Codable, Identifiable, Equatable{
+
+struct Media: Codable, Identifiable, Equatable, Hashable {
     let poster_path: String?
     var posterUrl: URL? {
         guard let posterPath = poster_path, let url = URL(string: "https://image.tmdb.org/t/p/w342\(posterPath)") else { return nil }
@@ -28,7 +29,7 @@ struct Media: Codable, Identifiable, Equatable{
     }
 
     let id: Int
-    let media_type: String
+    let media_type: MediaType
     let title: String?
     let name: String?
     let overview: String?

@@ -8,42 +8,46 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var storage = Storage.shared
-    
+
     var body: some View {
         TabView {
-            NavigationView {
+            NavigationStack {
                 MediaListView(mediaState: .watchlist)
             }
             .tabItem {
                 Image(systemName: "tv")
                 Text("Watchlist")
             }
+            .tag(0)
             
-            NavigationView {
+            NavigationStack {
                 MediaListView(mediaState: .watched)
             }
             .tabItem {
                 Image(systemName: "checkmark")
                 Text("Watched")
             }
+            .tag(1)
             
-            NavigationView {
+            NavigationStack {
                 SearchView()
             }
             .tabItem {
                 Image(systemName: "magnifyingglass")
                 Text("Find")
             }
+            .tag(2)
             
-            NavigationView {
+            NavigationStack {
                 AboutView()
             }
             .tabItem{
                 Image(systemName: "info.circle")
                 Text("About")
             }
+            .tag(3)
         }
+       
     }
 }
 

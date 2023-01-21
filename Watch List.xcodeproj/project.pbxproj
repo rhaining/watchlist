@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EF49CF6F297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */; };
+		EF49CF71297C739200B5DDD1 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF70297C739200B5DDD1 /* MediaType.swift */; };
 		EFCB763E2975D2F00034CD8B /* Watch_ListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB763D2975D2F00034CD8B /* Watch_ListApp.swift */; };
 		EFCB76402975D2F00034CD8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB763F2975D2F00034CD8B /* ContentView.swift */; };
 		EFCB76422975D2F20034CD8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFCB76412975D2F20034CD8B /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWatchProviderSectionView.swift; sourceTree = "<group>"; };
+		EF49CF70297C739200B5DDD1 /* MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 		EFCB763A2975D2F00034CD8B /* Watch List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Watch List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFCB763D2975D2F00034CD8B /* Watch_ListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watch_ListApp.swift; sourceTree = "<group>"; };
 		EFCB763F2975D2F00034CD8B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				EFCB766D2975E9540034CD8B /* Storage.swift */,
 				EFCB766F29760BB30034CD8B /* MediaResponse.swift */,
 				EFCB767129760BC40034CD8B /* Media.swift */,
+				EF49CF70297C739200B5DDD1 /* MediaType.swift */,
 				EFCB767429760BE20034CD8B /* WatchProviderResponse.swift */,
 				EFCB767629760BF30034CD8B /* WatchProviderRegion.swift */,
 				EFCB767829760C040034CD8B /* WatchProvider.swift */,
@@ -318,6 +321,7 @@
 				EFCB76682975D3310034CD8B /* SearchView.swift in Sources */,
 				EFCB763E2975D2F00034CD8B /* Watch_ListApp.swift in Sources */,
 				EFCB767029760BB30034CD8B /* MediaResponse.swift in Sources */,
+				EF49CF71297C739200B5DDD1 /* MediaType.swift in Sources */,
 				EFCB767229760BC40034CD8B /* Media.swift in Sources */,
 				EFCB767E297A0E340034CD8B /* MediaListView.swift in Sources */,
 				EFCB766E2975E9540034CD8B /* Storage.swift in Sources */,

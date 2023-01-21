@@ -7,12 +7,28 @@
 
 import SwiftUI
 
+
+
 struct MediaListView: View {
     let mediaState: MediaState
-
-    @ObservedObject var storage = Storage.shared    
+    @State private var mediaTypeFilter: MediaType = .all
+    @ObservedObject private var storage = Storage.shared
+    
+    init(mediaState: MediaState) {
+        self.mediaState = mediaState
+        staticMediaList = nil
+    }
+    
+//    For internal preview purposes
+    fileprivate init(list: [Media]) {
+        mediaState = .watchlist
+        staticMediaList = list
+    }
+    private var staticMediaList: [Media]? = nil
     
     private var mediaList: [Media] {
+        if let staticMediaList = staticMediaList { return staticMediaList }
+        
         switch mediaState {
             case .watchlist:
                 return storage.watchlist
@@ -35,6 +51,7 @@ struct MediaListView: View {
                 return "Watched"
         }
     }
+    
     var headerImgName: String {
         switch mediaState {
             case .watchlist:
@@ -45,14 +62,29 @@ struct MediaListView: View {
         }
     }
 
-
     var body: some View {
         List {
             if mediaList.count == 0 {
                 Text("No items found.")
             } else {
-                ForEach(mediaList, id: \.id){ m in
-                    NavigationLink(destination: MediaView(media: m)) {
+                Picker("Filter", selection: $mediaTypeFilter) {
+                    Text("All").tag(MediaType.all)
+                    Text("Movie").tag(MediaType.movie)
+                    Text("TV").tag(MediaType.tv)
+                }
+                .pickerStyle(.segmented)
+                                
+                ForEach(mediaList.filter({ m in
+                    switch mediaTypeFilter {
+                        case .all:
+                            return true
+                        case .movie, .tv:
+                            return m.media_type == mediaTypeFilter
+                        case .person:
+                            return false
+                    }
+                }), id: \.id){ m in
+                    NavigationLink(value: m) {
                         HStack(alignment: .top) {
                             if let thumbnailUrl = m.thumbnailUrl {
                                 AsyncImage(url: thumbnailUrl){ image in
@@ -92,6 +124,9 @@ struct MediaListView: View {
                 }
             }
         }
+        .navigationDestination(for: Media.self) { m in
+            MediaView(media: m)
+        }
         .navigationTitle(title)
         .navigationBarItems(leading: Image(systemName: headerImgName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
     }
@@ -99,9 +134,14 @@ struct MediaListView: View {
 
 struct MediaListView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
+            MediaListView(list: [ Media(poster_path: "/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",backdrop_path: nil, id: 238, media_type: .movie, title: "The Godfather", name: nil, overview: "lorem ipsum", release_date: "1972-03-14", first_air_date: nil)])
+        }
+        NavigationStack {
             MediaListView(mediaState: .watchlist)
         }
-        MediaListView(mediaState: .watched)
+        NavigationStack {
+            MediaListView(mediaState: .watched)
+        }
     }
 }
