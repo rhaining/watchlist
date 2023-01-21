@@ -26,23 +26,20 @@ struct SearchView: View {
                         ForEach(media, id: \.id){ m in
                             NavigationLink(value: m) {
                                 VStack {
-                                    if let posterUrl = m.posterUrl {
-                                        AsyncImage(url: posterUrl){ image in
-                                            image
-                                                .resizable()
-                                                .scaledToFit()
-                                        } placeholder: {
-                                            Color.purple.opacity(0.1)
-                                                .frame(height: 240)
-                                        }
-                                        .frame(width: 150)
+                                    if let thumbnailUrl = m.thumbnailUrl {
+                                        RemoteImageView(imageURL: thumbnailUrl)
+                                            .frame(width: 150, height: 225)
+                                    } else {
+                                        Color.gray.opacity(0.05)
+                                            .frame(width: 150, height: 225)
                                     }
-                                    Text("\(m.title ?? m.name ?? "") (\(m.year ?? ""))")
+                                    Text("\(m.title ?? m.name ?? "") \(m.year?.count ?? 0 > 0 ? "(\(m.year!))" : "")")
                                     Spacer()
                                 }
                             }
                         }
                     }
+                    .padding(.horizontal)
                 } else if queryString.count > 0 {
                     Text("No results found for '\(queryString)'.")
                         .padding()

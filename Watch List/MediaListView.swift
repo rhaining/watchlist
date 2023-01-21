@@ -61,7 +61,7 @@ struct MediaListView: View {
                 return "checkmark"
         }
     }
-
+    
     var body: some View {
         List {
             if mediaList.count == 0 {
@@ -73,7 +73,7 @@ struct MediaListView: View {
                     Text("TV").tag(MediaType.tv)
                 }
                 .pickerStyle(.segmented)
-                                
+
                 ForEach(mediaList.filter({ m in
                     switch mediaTypeFilter {
                         case .all:
@@ -85,29 +85,7 @@ struct MediaListView: View {
                     }
                 }), id: \.id){ m in
                     NavigationLink(value: m) {
-                        HStack(alignment: .top) {
-                            if let thumbnailUrl = m.thumbnailUrl {
-                                AsyncImage(url: thumbnailUrl){ image in
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                } placeholder: {
-                                    Color.purple.opacity(0.1)
-                                }
-                                .frame(width: 100)
-                            } else {
-                                Color.purple.opacity(0.01)
-                                    .frame(width: 100, height: 200)
-                            }
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(m.title ?? m.name ?? "")
-                                    .font(.system(size: 20))
-                                
-                                Text("(\(m.year ?? ""))")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.gray)
-                            }
-                        }
+                        MediaListRow(media: m)
                     }
                 }
                 .onMove(perform: canMoveItems ? { source, destination in
