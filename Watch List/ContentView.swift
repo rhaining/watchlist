@@ -8,14 +8,42 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var storage = Storage.shared
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        TabView {
+            NavigationView {
+                MediaListView(mediaState: .watchlist)
+            }
+            .tabItem {
+                Image(systemName: "tv")
+                Text("Watchlist")
+            }
+            
+            NavigationView {
+                MediaListView(mediaState: .watched)
+            }
+            .tabItem {
+                Image(systemName: "checkmark")
+                Text("Watched")
+            }
+            
+            NavigationView {
+                SearchView()
+            }
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                Text("Find")
+            }
+            
+            NavigationView {
+                AboutView()
+            }
+            .tabItem{
+                Image(systemName: "info.circle")
+                Text("About")
+            }
         }
-        .padding()
     }
 }
 
