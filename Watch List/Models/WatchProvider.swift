@@ -8,14 +8,18 @@
 import Foundation
 
 struct WatchProvider: Decodable {
-    let logo_path: String?
-    let provider_id: Int?
-    let display_priority: Int?
-    let provider_name: String?
+    let logoPath: String?
+    let providerId: Int?
+    let displayPriority: Int?
+    let providerName: String?
     
     var logoUrl: URL? {
-        guard let logo_path = logo_path, let url = URL(string: "https://image.tmdb.org/t/p/w92\(logo_path)") else { return nil }
+        guard let logoPath = logoPath, let url = URL(string: "https://image.tmdb.org/t/p/w92\(logoPath)") else { return nil }
         
         return url
     }
+}
+
+extension WatchProvider {
+    static let previewNetflix = WatchProvider(logoPath: nil, providerId: 1, displayPriority: 1, providerName: "Netflix")
 }

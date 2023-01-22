@@ -26,19 +26,20 @@ struct MediaListRow: View {
                     .font(.system(size: 20))
                     .multilineTextAlignment(.leading)
                 
-                Text("(\(media.year ?? ""))")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                if let year = media.year {
+                    Text("(\(year))")
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray)
+                }
             }
             
             Spacer()
         }
-//        .padding()
     }
 }
 
 struct MediaListRow_Previews: PreviewProvider {
     static var previews: some View {
-        MediaListRow(media: Media(poster_path: "/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",backdrop_path: nil, id: 238, media_type: .movie, title: "The Godfather", name: nil, overview: "lorem ipsum", release_date: "1972-03-14", first_air_date: nil))
+        MediaListRow(media: .previewGodfather)
     }
 }

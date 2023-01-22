@@ -33,7 +33,7 @@ struct SearchView: View {
                                         Color.gray.opacity(0.05)
                                             .frame(width: 150, height: 225)
                                     }
-                                    Text("\(m.title ?? m.name ?? "") \(m.year?.count ?? 0 > 0 ? "(\(m.year!))" : "")")
+                                    Text("\(m.title ?? m.name ?? "") \(m.year != nil ? "(\(m.year!))" : "")")
                                     Spacer()
                                 }
                             }
@@ -76,10 +76,10 @@ struct SearchView: View {
             task = URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
                 guard let data = data else { return }
                 do {
-                    let mediaReponse = try JSONDecoder().decode(MediaResponse.self, from: data)
+                    let mediaReponse = try JSONDecoder.tmdb.decode(MediaResponse.self, from: data)
                     self.media = mediaReponse.results.filter({ m in
-                        return (m.media_type == .movie ||
-                                m.media_type == .tv) && (m.title != nil || m.name != nil)
+                        return (m.mediaType == .movie ||
+                                m.mediaType == .tv) && (m.title != nil || m.name != nil)
                     });
                 } catch {
                     NSLog("error decoding \(error)")

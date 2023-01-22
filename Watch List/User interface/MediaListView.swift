@@ -79,7 +79,7 @@ struct MediaListView: View {
                         case .all:
                             return true
                         case .movie, .tv:
-                            return m.media_type == mediaTypeFilter
+                            return m.mediaType == mediaTypeFilter
                         case .person:
                             return false
                     }
@@ -113,7 +113,7 @@ struct MediaListView: View {
 struct MediaListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            MediaListView(list: [ Media(poster_path: "/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",backdrop_path: nil, id: 238, media_type: .movie, title: "The Godfather", name: nil, overview: "lorem ipsum", release_date: "1972-03-14", first_air_date: nil)])
+            MediaListView(list: [ .previewGodfather ])
         }
         NavigationStack {
             MediaListView(mediaState: .watchlist)

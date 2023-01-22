@@ -28,12 +28,12 @@ final class Storage: ObservableObject {
 
     private init() {
         moveFavesToWatchlist()
-        readFromFile()
+        readFromDisk()
     }
     
     //        can remove this later:
     private func moveFavesToWatchlist() {
-        guard let favesUrl = fileURL(for: "faves.json"), let watchlistURL = watchlistURL else { return }
+        guard let favesUrl = fileURL(for: "faves.json"), FileManager.default.fileExists(atPath: favesUrl.absoluteString), let watchlistURL = watchlistURL else { return }
         do {
             try FileManager.default.moveItem(at: favesUrl, to: watchlistURL)
         } catch {
@@ -41,25 +41,21 @@ final class Storage: ObservableObject {
         }
     }
     
-    private func readFromFile() {
+    private func readFromDisk() {
         guard let watchlistURL = watchlistURL, let watchedURL = watchedURL else { return }
-            
+
+        self.watchlist = readFrom(fileUrl: watchlistURL)
+        self.watchedMedia = readFrom(fileUrl: watchedURL)
+    }
+    
+    private func readFrom(fileUrl: URL) -> [Media] {
         do {
-            let data = try Data(contentsOf: watchlistURL, options: .mappedIfSafe)
-            let decoder = JSONDecoder()
-            let jsonData = try decoder.decode([Media].self, from: data)
-            self.watchlist = jsonData
+            let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
+            let jsonData = try JSONDecoder.tmdb.decode([Media].self, from: data)
+            return jsonData
         } catch {
             NSLog("Unable to read from file \(error)")
-        }
-        
-        do {
-            let data = try Data(contentsOf: watchedURL, options: .mappedIfSafe)
-            let decoder = JSONDecoder()
-            let jsonData = try decoder.decode([Media].self, from: data)
-            self.watchedMedia = jsonData
-        } catch {
-            NSLog("Unable to read from file \(error)")
+            return []
         }
     }
     
@@ -67,8 +63,7 @@ final class Storage: ObservableObject {
         guard let fileUrl = fileUrl else { return }
 
         do {
-            let encoder = JSONEncoder()
-            let jsonData = try encoder.encode(media)
+            let jsonData = try JSONEncoder.tmdb.encode(media)
             try jsonData.write(to: fileUrl)
         } catch {
             NSLog("Unable to save \(error)")

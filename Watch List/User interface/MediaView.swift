@@ -85,7 +85,7 @@ struct MediaView: View {
             }
             .padding()
             
-            ShareLink("Share \(media.media_type.rawValue)", item: URL(string: "https://www.themoviedb.org/\(media.media_type.rawValue)/\(media.id)")!)
+            ShareLink("Share \(media.mediaType.rawValue)", item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
                 .buttonStyle(.bordered)
             
             if let watchProviderRegion = watchProviderRegion {
@@ -118,7 +118,7 @@ struct MediaView: View {
             
         }
         .navigationTitle(media.title ?? media.name ?? "")
-        .navigationBarItems(trailing: Text(media.year ?? ""))
+        .navigationBarItems(trailing: media.year != nil ? Text("\(media.year!)") : nil)
         .background{
             if let posterUrl = media.backdropUrl ?? media.posterUrl {
                 AsyncImage(url: posterUrl){ image in
@@ -207,14 +207,14 @@ struct MediaView: View {
     
     
     func loadWatchProviders() {
-        let urlStr = "https://api.themoviedb.org/3/\(media.media_type.rawValue)/\(media.id)/watch/providers?api_key=\(Constants.apiKey)"
+        let urlStr = "https://api.themoviedb.org/3/\(media.mediaType.rawValue)/\(media.id)/watch/providers?api_key=\(Constants.apiKey)"
         
         if let url = URL(string: urlStr) {
             let request = URLRequest(url: url);
             URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
                 guard let data = data else { return }
                 do {
-                    let watchProviderReponse = try JSONDecoder().decode(WatchProviderResponse.self, from: data)
+                    let watchProviderReponse = try JSONDecoder.tmdb.decode(WatchProviderResponse.self, from: data)
                     self.watchProviderRegion = watchProviderReponse.results?["US"]
                     
                 } catch {
@@ -227,8 +227,8 @@ struct MediaView: View {
 
 struct MediaView_Previews: PreviewProvider {
     static var previews: some View {
-        MediaView(media: Media(poster_path: "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", backdrop_path: nil, id: 238, media_type: .movie, title: "The Godfather", name: nil, overview: "My money's in that office, right? If she start giving me some bullshit about it ain't there, and we got to go someplace else and get it, I'm gonna shoot you in the head then and there. Then I'm gonna shoot that bitch in the kneecaps, find out where my goddamn money is. She gonna tell me too. Hey, look at me when I'm talking to you, motherfucker. You listen: we go in there, and that nigga Winston or anybody else is in there, you the first motherfucker to get shot. You understand?", release_date: "1972-03-14", first_air_date: nil))
-        MediaView(media: Media(poster_path: "/tGmCxGkVMOqig2TrbXAsE9dOVvX.jpg",backdrop_path: nil, id: 238, media_type: .tv, title: nil, name: "Wonder years", overview: "lorem ipsum", release_date: nil, first_air_date: "1975-05-05"))
-        MediaView(media: Media(poster_path: "/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg",backdrop_path: nil, id: 238, media_type: .movie, title: "The Godfather", name: nil, overview: "lorem ipsum", release_date: "1972-03-14", first_air_date: nil))
+        MediaView(media: .previewGodfatherLong)
+        MediaView(media: .previewWonderYears)
+        MediaView(media: .previewGodfather)
     }
 }

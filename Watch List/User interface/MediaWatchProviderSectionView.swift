@@ -16,7 +16,7 @@ struct MediaWatchProviderSectionView: View {
             Text(title)
                 .font(.headline)
             
-            ForEach(watchProviders, id: \.provider_id) { provider in
+            ForEach(watchProviders, id: \.providerId) { provider in
                 HStack {
                     if let logoUrl = provider.logoUrl {
                         AsyncImage(url: logoUrl){ image in
@@ -34,7 +34,7 @@ struct MediaWatchProviderSectionView: View {
                             .multilineTextAlignment(.center)
                     }
                     
-                    Text(provider.provider_name ?? "n/a")
+                    Text(provider.providerName ?? "n/a")
                         .font(.system(size: 18))
                 }
                 .padding(1)
@@ -48,6 +48,6 @@ struct MediaWatchProviderSectionView: View {
 
 struct MediaWatchProviderSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        MediaWatchProviderSectionView(title: "Available to watch:", watchProviders: [WatchProvider(logo_path: nil, provider_id: 1, display_priority: 1, provider_name: "Netflix")])
+        MediaWatchProviderSectionView(title: "Available to watch:", watchProviders: [.previewNetflix])
     }
 }
