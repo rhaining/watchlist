@@ -10,6 +10,8 @@ import SwiftUI
 
 
 struct MediaListView: View {
+    @Environment(\.editMode) var editMode
+    
     let mediaState: MediaState
     @State private var mediaTypeFilter: MediaType = .all
     @ObservedObject private var storage = Storage.shared
@@ -107,6 +109,10 @@ struct MediaListView: View {
         }
         .navigationTitle(title)
         .navigationBarItems(leading: Image(systemName: headerImgName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
+        .toolbar {
+            EditButton()
+                .disabled(mediaList.count == 0)
+        }
     }
 }
 
