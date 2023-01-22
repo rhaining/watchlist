@@ -11,13 +11,19 @@ final class Storage: ObservableObject {
     static let shared = Storage()
 
     @Published var watchlist: [Media] = []
+    @Published var shortlist: [Media] = []
     @Published var watchedMedia: [Media] = []
-    private var watchlistURL: URL? {
-        return fileURL(for: "watchlist.json")
+    
+    private var shortlistURL: URL {
+        return fileURL(for: "shortlist.json")!
     }
-    private var watchedURL: URL? {
-        return fileURL(for: "watched.json")
+    private var watchlistURL: URL {
+        return fileURL(for: "watchlist.json")!
     }
+    private var watchedURL: URL {
+        return fileURL(for: "watched.json")!
+    }
+
     private func fileURL(for fileName: String) -> URL? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             NSLog("can't find directory")
@@ -33,7 +39,7 @@ final class Storage: ObservableObject {
     
     //        can remove this later:
     private func moveFavesToWatchlist() {
-        guard let favesUrl = fileURL(for: "faves.json"), FileManager.default.fileExists(atPath: favesUrl.absoluteString), let watchlistURL = watchlistURL else { return }
+        guard let favesUrl = fileURL(for: "faves.json"), FileManager.default.fileExists(atPath: favesUrl.absoluteString) else { return }
         do {
             try FileManager.default.moveItem(at: favesUrl, to: watchlistURL)
         } catch {
@@ -42,8 +48,7 @@ final class Storage: ObservableObject {
     }
     
     private func readFromDisk() {
-        guard let watchlistURL = watchlistURL, let watchedURL = watchedURL else { return }
-
+        self.shortlist = readFrom(fileUrl: shortlistURL)
         self.watchlist = readFrom(fileUrl: watchlistURL)
         self.watchedMedia = readFrom(fileUrl: watchedURL)
     }
@@ -59,9 +64,7 @@ final class Storage: ObservableObject {
         }
     }
     
-    private func save(fileUrl: URL?, media: [Media]) {
-        guard let fileUrl = fileUrl else { return }
-
+    private func save(fileUrl: URL, media: [Media]) {
         do {
             let jsonData = try JSONEncoder.tmdb.encode(media)
             try jsonData.write(to: fileUrl)
@@ -71,24 +74,44 @@ final class Storage: ObservableObject {
     }
     
     private func save() {
+        save(fileUrl: shortlistURL, media: shortlist);
         save(fileUrl: watchlistURL, media: watchlist);
         save(fileUrl: watchedURL, media: watchedMedia);
     }
     
-    func isOnWatchlist(_ media: Media) -> Bool {
-        return watchlist.contains(media)
+    func mediaList(for mediaState: MediaState) -> [Media] {
+        let mediaList: [Media]
+        switch mediaState {
+            case .shortlist:
+                mediaList = shortlist
+            case .watchlist:
+                mediaList = watchlist
+            case .watched:
+                mediaList = watchedMedia
+        }
+        return mediaList
     }
     
-    func isWatched(_ media: Media) -> Bool {
-        return watchedMedia.contains(media)
+    func set(mediaList: [Media], for mediaState: MediaState) {
+        switch mediaState {
+            case .shortlist:
+                shortlist = mediaList
+            case .watchlist:
+                watchlist = mediaList
+            case .watched:
+                watchedMedia = mediaList
+        }
     }
     
-    func addToWatchlist(_ newMedia: Media) {
-        watchlist.insert(newMedia, at: 0)
-        save()
+    func isOnList(_ mediaState: MediaState, media: Media) -> Bool {
+        return mediaList(for: mediaState).contains(media)
     }
+    
     
     func remove(_ oldMedia: Media) {
+        shortlist.removeAll { m in
+            return oldMedia == m
+        }
         watchlist.removeAll { m in
             return oldMedia == m
         }
@@ -97,33 +120,33 @@ final class Storage: ObservableObject {
         }
         save()
     }
-    func deleteFromWatchlist(indexSet: IndexSet) {
-        watchlist.remove(atOffsets: indexSet)
-        save()
-    }
-    func deleteFromWatched(indexSet: IndexSet) {
-        watchedMedia.remove(atOffsets: indexSet)
+    
+    func delete(from mediaState: MediaState, indexSet: IndexSet) {
+        var mediaList = mediaList(for: mediaState)
+        mediaList.remove(atOffsets: indexSet)
+        set(mediaList: mediaList, for: mediaState)
         save()
     }
     
-    func moveWithinWatchlist(from source: IndexSet, to destination: Int) {
-        watchlist.move(fromOffsets: source, toOffset: destination)
+    func moveWithinList(mediaState: MediaState, from source: IndexSet, to destination: Int) {
+        var mediaList = mediaList(for: mediaState)
+        mediaList.move(fromOffsets: source, toOffset: destination)
+        set(mediaList: mediaList, for: mediaState)
         save()
     }
-    
-    func markAsWatched(_ media: Media) {
+   
+    func move(media: Media, to mediaState: MediaState) {
         remove(media)
         
         var copyMedia = media
-        copyMedia.watchedAt = Date()
-        watchedMedia.insert(copyMedia, at: 0)
+        if mediaState == .watched {
+            copyMedia.watchedAt = Date()
+        }
         
+        var mediaList = mediaList(for: mediaState)
+        mediaList.insert(copyMedia, at: 0)
+        set(mediaList: mediaList, for: mediaState)
         save()
     }
-    
-    func moveToWatchlist(_ media: Media) {
-        remove(media)
-        watchlist.insert(media, at: 0)
-        save()
-    }
+
 }

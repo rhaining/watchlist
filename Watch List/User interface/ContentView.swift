@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
-    @State private var presentedMedia: [[Media]] = [[], [], []]
+    @State private var presentedMedia: [[Media]] = [[], [], [], []]
     
     var selectionBinding: Binding<Int> { Binding(
         get: {
@@ -27,31 +27,40 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: selectionBinding) {
             NavigationStack(path: $presentedMedia[0]) {
-                MediaListView(mediaState: .watchlist)
+                MediaListView(mediaState: .shortlist)
             }
             .tabItem {
-                Image(systemName: "tv")
-                Text("Watchlist")
+                Image(systemName: MediaState.shortlist.imageName)
+                Text(MediaState.shortlist.title)
             }
             .tag(0)
             
             NavigationStack(path: $presentedMedia[1]) {
-                MediaListView(mediaState: .watched)
+                MediaListView(mediaState: .watchlist)
             }
             .tabItem {
-                Image(systemName: "checkmark")
-                Text("Watched")
+                Image(systemName: MediaState.watchlist.imageName)
+                Text(MediaState.watchlist.title)
             }
             .tag(1)
             
             NavigationStack(path: $presentedMedia[2]) {
+                MediaListView(mediaState: .watched)
+            }
+            .tabItem {
+                Image(systemName: MediaState.watched.imageName)
+                Text(MediaState.watched.title)
+            }
+            .tag(2)
+            
+            NavigationStack(path: $presentedMedia[3]) {
                 SearchView()
             }
             .tabItem {
                 Image(systemName: "magnifyingglass")
                 Text("Find")
             }
-            .tag(2)
+            .tag(3)
             
             NavigationStack {
                 AboutView()
@@ -60,7 +69,7 @@ struct ContentView: View {
                 Image(systemName: "info.circle")
                 Text("About")
             }
-            .tag(3)
+            .tag(4)
         }
        
     }

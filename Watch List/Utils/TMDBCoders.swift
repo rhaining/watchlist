@@ -10,7 +10,7 @@ import Foundation
 extension DateFormatter {
     static let tmdb: DateFormatter = {
         let tmdb = DateFormatter()
-        tmdb.dateFormat = "YYYY-mm-dd"
+        tmdb.dateFormat = "yyyy-MM-dd"
         return tmdb
     }()
 }

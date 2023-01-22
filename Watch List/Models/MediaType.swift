@@ -15,3 +15,18 @@ enum MediaType: String, Codable, CaseIterable, Identifiable {
     
     var id: String { return rawValue }
 }
+
+extension MediaType {
+    var name: String {
+        switch self {
+            case .all:
+                return "All"
+            case .movie:
+                return "Movie"
+            case .tv:
+                return "TV Show"
+            case .person:
+                return "Person"
+        }
+    }
+}

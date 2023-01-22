@@ -68,25 +68,43 @@ struct MediaView: View {
                     .padding()
             }
             
+            
+            if let mediaState = mediaState {
+                Group {
+                    Text("Currently saved to ")
+                    + Text("\(Image(systemName: mediaState.imageName)) \(mediaState.title)")
+                        .fontWeight(.semibold)
+                }
+                    .padding(.top)
+            }
+
             HStack {
                 switch mediaState {
+                    case .shortlist:
+                        moveToWatchlistButton
+                        markAsWatchedButton
+                        removeMediaButton
+                        
                     case .watchlist:
+                        addToShortlistButton
                         markAsWatchedButton
                         removeMediaButton
                 
                     case .watched:
+                        addToShortlistButton
                         moveToWatchlistButton
                         removeMediaButton
                         
                     default:
+                        addToShortlistButton
                         addToWatchlistButton
                         markAsWatchedButton
                 }
+                
             }
             .padding()
             
-            ShareLink("Share \(media.mediaType.rawValue)", item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
-                .buttonStyle(.bordered)
+            ShareLink("Share \(media.mediaType.name)", item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
             
             if let watchProviderRegion = watchProviderRegion {
 
@@ -140,23 +158,39 @@ struct MediaView: View {
     }
     
     private func updateMediaState() {
-        if storage.isOnWatchlist(media) {
-            mediaState = .watchlist
-        } else if storage.isWatched(media) {
-            mediaState = .watched
-        } else {
-            mediaState = nil
+        var newState: MediaState? = nil
+        for state in MediaState.allCases {
+            if storage.isOnList(state, media: media) {
+                newState = state
+                break
+            }
         }
+        mediaState = newState
+    }
+    
+    private var addToShortlistButton: some View {
+        Button(action: {
+            storage.move(media: media, to: .shortlist)
+            updateMediaState()
+        }) {
+            HStack {
+                Image(systemName: MediaState.shortlist.imageName)
+                Text("Save to short list")
+                    .font(.system(size: 14))
+            }
+        }
+        .buttonStyle(.bordered)
     }
     
     private var addToWatchlistButton: some View {
         Button(action: {
-            storage.addToWatchlist(media)
+            storage.move(media: media, to: .watchlist)
             updateMediaState()
         }) {
             HStack {
-                Image(systemName: "tv")
+                Image(systemName: MediaState.watchlist.imageName)
                 Text("Save to watch")
+                    .font(.system(size: 14))
             }
         }
         .buttonStyle(.bordered)
@@ -164,12 +198,13 @@ struct MediaView: View {
     
     private var moveToWatchlistButton: some View {
         Button(action: {
-            storage.moveToWatchlist(media)
+            storage.move(media: media, to: .watchlist)
             updateMediaState()
         }) {
             HStack {
-                Image(systemName: "tv")
+                Image(systemName: MediaState.watchlist.imageName)
                 Text("Move to watchlist")
+                    .font(.system(size: 14))
             }
             
         }
@@ -178,12 +213,13 @@ struct MediaView: View {
     
     private var markAsWatchedButton: some View {
         Button(action: {
-            storage.markAsWatched(media)
+            storage.move(media: media, to: .watched)
             updateMediaState()
         }) {
             HStack {
-                Image(systemName: "checkmark")
-                Text("Mark as watched")
+                Image(systemName: MediaState.watched.imageName)
+                Text("Mark watched")
+                    .font(.system(size: 14))
             }
             
         }
@@ -198,6 +234,7 @@ struct MediaView: View {
             HStack {
                 Image(systemName: "trash")
                 Text("Remove")
+                    .font(.system(size: 14))
             }
             
         }

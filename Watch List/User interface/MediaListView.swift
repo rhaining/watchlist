@@ -31,39 +31,13 @@ struct MediaListView: View {
     private var mediaList: [Media] {
         if let staticMediaList = staticMediaList { return staticMediaList }
         
-        switch mediaState {
-            case .watchlist:
-                return storage.watchlist
-                
-            case .watched:
-                return storage.watchedMedia
-        }
+        return storage.mediaList(for: mediaState)
     }
     
     private var canMoveItems: Bool {
-        return mediaState == .watchlist
+        return mediaState == .watchlist || mediaState == .shortlist
     }
-    
-    var title: String {
-        switch mediaState {
-            case .watchlist:
-                return "Watchlist"
-                
-            case .watched:
-                return "Watched"
-        }
-    }
-    
-    var headerImgName: String {
-        switch mediaState {
-            case .watchlist:
-                return "tv"
-                
-            case .watched:
-                return "checkmark"
-        }
-    }
-    
+        
     var body: some View {
         List {
             if mediaList.count == 0 {
@@ -91,24 +65,18 @@ struct MediaListView: View {
                     }
                 }
                 .onMove(perform: canMoveItems ? { source, destination in
-                    storage.moveWithinWatchlist(from: source, to: destination)
+                    storage.moveWithinList(mediaState: mediaState, from: source, to: destination)
                 } : nil)
                 .onDelete { source in
-                    switch mediaState {
-                        case .watchlist:
-                            storage.deleteFromWatchlist(indexSet: source)
-                            
-                        case .watched:
-                            storage.deleteFromWatched(indexSet: source)
-                    }
+                    storage.delete(from: mediaState, indexSet: source)
                 }
             }
         }
         .navigationDestination(for: Media.self) { m in
             MediaView(media: m)
         }
-        .navigationTitle(title)
-        .navigationBarItems(leading: Image(systemName: headerImgName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
+        .navigationTitle(mediaState.title)
+        .navigationBarItems(leading: Image(systemName: mediaState.imageName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
         .toolbar {
             EditButton()
                 .disabled(mediaList.count == 0)
