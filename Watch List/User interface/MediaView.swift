@@ -79,20 +79,12 @@ struct MediaView: View {
             }
 
             HStack {
-                switch mediaState {
-                    case .watchlist:
-                        markAsWatchedButton
-                        removeMediaButton
-                
-                    case .watched:
-                        moveToWatchlistButton
-                        removeMediaButton
-                        
-                    default:
-                        addToWatchlistButton
-                        markAsWatchedButton
-                }
-                
+                addToWatchlistButton
+                    .disabled(mediaState == .watchlist)
+                markAsWatchedButton
+                    .disabled(mediaState == .watched)
+                removeMediaButton
+                    .disabled(mediaState == nil)
             }
             .padding()
             
