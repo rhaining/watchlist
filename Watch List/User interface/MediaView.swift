@@ -22,61 +22,44 @@ struct MediaView: View {
         return df
     }()
     
+    func showCompactOverview() -> Bool {
+        if let overview = media.overview {
+            return !exposeFullOverview && overview.count > 100;
+        } else {
+            return !exposeFullOverview
+        }
+    }
+    
     var body: some View {
         ScrollView {
-            HStack {
-                Spacer()
-                
-                if let posterUrl = media.posterUrl {
-                    AsyncImage(url: posterUrl){ image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 250)
-                    } placeholder: {
-                        Color.purple.opacity(0.01)
-                    }
-                }
-                
-                Spacer()
-            }
-            
             if let overview = media.overview {
                 HStack(alignment: .top) {
-                    if exposeFullOverview || overview.count < 100 {
-                        Button("▿", action: { exposeFullOverview = false })
-                        Text(media.title ?? media.name ?? "")
-                            .fontWeight(.semibold)
-                        + Text(media.year != nil ? " (\(media.year!))" : "")
-                        + Text(": ")
-                        + Text(overview)
-                    } else {
-                        Button("▹", action: { exposeFullOverview = true  })
-                        Text(media.title ?? media.name ?? "")
-                            .fontWeight(.semibold)
-                        + Text(media.year != nil ? " (\(media.year!))" : "")
-                        + Text(": ")
-                        + Text(overview.prefix(100) + "…")
-                    }
+                    Button(showCompactOverview() ? "▹" : "▿", action: { exposeFullOverview = !exposeFullOverview })
+
+                    Text(showCompactOverview() ? overview.prefix(100) + "…" : overview)
+                        .foregroundColor(.white)
+                        .shadow(color: .black, radius: 5)
+                    
+                    Spacer()
                 }
                 .onTapGesture { exposeFullOverview = !exposeFullOverview }
-                .padding(.horizontal)
+                .padding()
             }
             
-            if let watchedAt = media.watchedAt {
-                Text("Watched on: " + dateFormatter.string(from: watchedAt))
-                    .padding()
-            }
-            
-            
-            if let mediaState = mediaState {
-                Group {
+            VStack(spacing: 10) {
+                if let watchedAt = media.watchedAt {
+                    Text("Watched on: " + dateFormatter.string(from: watchedAt))
+                }
+                
+                if let mediaState = mediaState {
                     Text("Currently saved to ")
                     + Text("\(Image(systemName: mediaState.imageName)) \(mediaState.title)")
                         .fontWeight(.semibold)
                 }
-                    .padding(.top)
             }
+            .foregroundColor(.white)
+            .shadow(color: .black, radius: 5)
+            .padding()
 
             HStack {
                 addToWatchlistButton
@@ -89,47 +72,49 @@ struct MediaView: View {
             .padding()
             
             ShareLink("Share \(media.mediaType.name)", item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
+                .buttonStyle(.bordered)
+                .background(Color.white.cornerRadius(10))
+                .padding(.bottom)
             
             if let watchProviderRegion = watchProviderRegion {
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        if let providers = watchProviderRegion.flatrate {
-                            MediaWatchProviderSectionView(title: "Available to stream:", watchProviders: providers)
-                        }
-                        if let providers = watchProviderRegion.rent {
-                            MediaWatchProviderSectionView(title: "Available to rent:", watchProviders: providers)
-                        }
-                        if let providers = watchProviderRegion.buy {
-                            MediaWatchProviderSectionView(title: "Available to buy:", watchProviders: providers)
-                        }
+                VStack(alignment: .leading) {
+                    if let providers = watchProviderRegion.flatrate {
+                        MediaWatchProviderSectionView(title: "Available to stream:", watchProviders: providers)
                     }
-                    Spacer()
+                    if let providers = watchProviderRegion.rent {
+                        MediaWatchProviderSectionView(title: "Available to rent:", watchProviders: providers)
+                    }
+                    if let providers = watchProviderRegion.buy {
+                        MediaWatchProviderSectionView(title: "Available to buy:", watchProviders: providers)
+                    }
                 }
 
                 Text("Source: JustWatch")
                     .font(.subheadline)
                     .foregroundColor(.gray)
+                    .shadow(color: .black, radius: 5)
                     .italic()
-                    .padding(.top, 10)
+                    .padding(.vertical, 10)
             } else {
                 Text("Not currently available to stream")
                     .italic()
+                    .foregroundColor(.white)
+                    .shadow(color: .black, radius: 5)
                     .padding()
             }
             
         }
         .navigationTitle(media.title ?? media.name ?? "")
-        .navigationBarItems(trailing: media.year != nil ? Text("\(media.year!)") : nil)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .navigationBarItems(trailing: media.year != nil ? Text("(\(media.year!))") : nil)
         .background{
             if let posterUrl = media.backdropUrl ?? media.posterUrl {
                 AsyncImage(url: posterUrl){ image in
                     image
                         .resizable()
                         .scaledToFill()
-                        .opacity(0.10)
-                        .blur(radius: 10)
-                        .edgesIgnoringSafeArea(.all)
+                        .blur(radius: 4)
+                        .overlay(Color.black.opacity(0.6))
                 } placeholder: {
                     Color.purple.opacity(0.01)
                 }
@@ -164,22 +149,25 @@ struct MediaView: View {
             }
         }
         .buttonStyle(.bordered)
+        .background(Color.white.cornerRadius(10))
     }
     
-    private var moveToWatchlistButton: some View {
-        Button(action: {
-            storage.move(media: media, to: .watchlist)
-            updateMediaState()
-        }) {
-            HStack {
-                Image(systemName: MediaState.watchlist.imageName)
-                Text("Move to watchlist")
-                    .font(.system(size: 14))
-            }
-            
-        }
-        .buttonStyle(.bordered)
-    }
+//    private var moveToWatchlistButton: some View {
+//        Button(action: {
+//            storage.move(media: media, to: .watchlist)
+//            updateMediaState()
+//        }) {
+//            HStack {
+//                Image(systemName: MediaState.watchlist.imageName)
+//                Text("Move to watchlist")
+//                    .font(.system(size: 14))
+//            }
+//
+//        }
+//        .buttonStyle(.bordered)
+//        .backgroundStyle(Color.white)
+//
+//    }
     
     private var markAsWatchedButton: some View {
         Button(action: {
@@ -194,6 +182,8 @@ struct MediaView: View {
             
         }
         .buttonStyle(.bordered)
+        .background(Color.white.cornerRadius(10))
+
     }
     
     private var removeMediaButton: some View {
@@ -209,6 +199,7 @@ struct MediaView: View {
             
         }
         .buttonStyle(.bordered)
+        .background(Color.white.cornerRadius(10))
     }
 
     
@@ -234,8 +225,14 @@ struct MediaView: View {
 
 struct MediaView_Previews: PreviewProvider {
     static var previews: some View {
-        MediaView(media: .previewGodfatherLong)
-        MediaView(media: .previewWonderYears)
-        MediaView(media: .previewGodfather)
+        NavigationView {
+            MediaView(media: .previewGodfatherLong)
+        }
+        NavigationView {
+            MediaView(media: .previewWonderYears)
+        }
+        NavigationView {
+            MediaView(media: .previewGodfather)
+        }
     }
 }

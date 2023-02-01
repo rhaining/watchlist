@@ -36,13 +36,16 @@ struct MediaWatchProviderSectionView: View {
                     
                     Text(provider.providerName ?? "n/a")
                         .font(.system(size: 18))
+                    
+                    Spacer()
                 }
                 .padding(1)
             }
            
         }
         .padding()
-        
+        .background(Color.white.opacity(0.7).cornerRadius(4))
+        .padding(.horizontal)
     }
 }
 
