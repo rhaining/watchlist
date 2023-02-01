@@ -80,23 +80,15 @@ struct MediaView: View {
 
             HStack {
                 switch mediaState {
-                    case .shortlist:
-                        moveToWatchlistButton
-                        markAsWatchedButton
-                        removeMediaButton
-                        
                     case .watchlist:
-                        addToShortlistButton
                         markAsWatchedButton
                         removeMediaButton
                 
                     case .watched:
-                        addToShortlistButton
                         moveToWatchlistButton
                         removeMediaButton
                         
                     default:
-                        addToShortlistButton
                         addToWatchlistButton
                         markAsWatchedButton
                 }
@@ -166,20 +158,6 @@ struct MediaView: View {
             }
         }
         mediaState = newState
-    }
-    
-    private var addToShortlistButton: some View {
-        Button(action: {
-            storage.move(media: media, to: .shortlist)
-            updateMediaState()
-        }) {
-            HStack {
-                Image(systemName: MediaState.shortlist.imageName)
-                Text("Save to short list")
-                    .font(.system(size: 14))
-            }
-        }
-        .buttonStyle(.bordered)
     }
     
     private var addToWatchlistButton: some View {

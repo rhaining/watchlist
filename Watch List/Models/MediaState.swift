@@ -8,7 +8,6 @@
 import Foundation
 
 enum MediaState: CaseIterable {
-    case shortlist
     case watchlist
     case watched
 }
@@ -16,9 +15,6 @@ enum MediaState: CaseIterable {
 extension MediaState {
     var title: String {
         switch self {
-            case .shortlist:
-                return "Short list"
-            
             case .watchlist:
                 return "Watchlist"
                 
@@ -29,9 +25,6 @@ extension MediaState {
     
     var imageName: String {
         switch self {
-            case .shortlist:
-                return "bolt"
-            
             case .watchlist:
                 return "tv"
                 

@@ -26,14 +26,6 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: selectionBinding) {
-            NavigationStack(path: $presentedMedia[0]) {
-                MediaListView(mediaState: .shortlist)
-            }
-            .tabItem {
-                Image(systemName: MediaState.shortlist.imageName)
-                Text(MediaState.shortlist.title)
-            }
-            .tag(0)
             
             NavigationStack(path: $presentedMedia[1]) {
                 MediaListView(mediaState: .watchlist)

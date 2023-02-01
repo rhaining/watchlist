@@ -35,7 +35,7 @@ struct MediaListView: View {
     }
     
     private var canMoveItems: Bool {
-        return mediaState == .watchlist || mediaState == .shortlist
+        return mediaState == .watchlist
     }
         
     var body: some View {

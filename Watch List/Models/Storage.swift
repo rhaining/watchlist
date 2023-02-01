@@ -11,12 +11,8 @@ final class Storage: ObservableObject {
     static let shared = Storage()
 
     @Published var watchlist: [Media] = []
-    @Published var shortlist: [Media] = []
     @Published var watchedMedia: [Media] = []
     
-    private var shortlistURL: URL {
-        return fileURL(for: "shortlist.json")!
-    }
     private var watchlistURL: URL {
         return fileURL(for: "watchlist.json")!
     }
@@ -33,22 +29,26 @@ final class Storage: ObservableObject {
     }
 
     private init() {
-        moveFavesToWatchlist()
         readFromDisk()
+        moveShortlistToWatchlist()
     }
     
     //        can remove this later:
-    private func moveFavesToWatchlist() {
-        guard let favesUrl = fileURL(for: "faves.json"), FileManager.default.fileExists(atPath: favesUrl.absoluteString) else { return }
-        do {
-            try FileManager.default.moveItem(at: favesUrl, to: watchlistURL)
-        } catch {
-            NSLog("move exception \(error)")
+    private func moveShortlistToWatchlist() {
+        let shortlistURL = fileURL(for: "shortlist.json")!
+        let shortlist = readFrom(fileUrl: shortlistURL)
+        if shortlist.count > 0 {
+            watchlist.insert(contentsOf: shortlist, at: 0)
+            save()
+            do {
+                try FileManager.default.removeItem(at: shortlistURL)
+            } catch {
+                NSLog("error removing shortlist \(error)")
+            }
         }
     }
     
     private func readFromDisk() {
-        self.shortlist = readFrom(fileUrl: shortlistURL)
         self.watchlist = readFrom(fileUrl: watchlistURL)
         self.watchedMedia = readFrom(fileUrl: watchedURL)
     }
@@ -74,7 +74,6 @@ final class Storage: ObservableObject {
     }
     
     private func save() {
-        save(fileUrl: shortlistURL, media: shortlist);
         save(fileUrl: watchlistURL, media: watchlist);
         save(fileUrl: watchedURL, media: watchedMedia);
     }
@@ -82,8 +81,6 @@ final class Storage: ObservableObject {
     func mediaList(for mediaState: MediaState) -> [Media] {
         let mediaList: [Media]
         switch mediaState {
-            case .shortlist:
-                mediaList = shortlist
             case .watchlist:
                 mediaList = watchlist
             case .watched:
@@ -94,8 +91,6 @@ final class Storage: ObservableObject {
     
     func set(mediaList: [Media], for mediaState: MediaState) {
         switch mediaState {
-            case .shortlist:
-                shortlist = mediaList
             case .watchlist:
                 watchlist = mediaList
             case .watched:
@@ -109,9 +104,6 @@ final class Storage: ObservableObject {
     
     
     func remove(_ oldMedia: Media) {
-        shortlist.removeAll { m in
-            return oldMedia == m
-        }
         watchlist.removeAll { m in
             return oldMedia == m
         }
