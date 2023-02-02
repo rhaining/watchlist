@@ -32,6 +32,10 @@
 		EFCB767B297611980034CD8B /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB767A297611980034CD8B /* AboutView.swift */; };
 		EFCB767E297A0E340034CD8B /* MediaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB767D297A0E340034CD8B /* MediaListView.swift */; };
 		EFCB7680297A0EAB0034CD8B /* MediaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB767F297A0EAB0034CD8B /* MediaState.swift */; };
+		EFFED10F298B2E02009436B5 /* MovieDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED10E298B2E02009436B5 /* MovieDetails.swift */; };
+		EFFED111298B33AF009436B5 /* MediaDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED110298B33AF009436B5 /* MediaDetails.swift */; };
+		EFFED113298B388B009436B5 /* TVDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED112298B388B009436B5 /* TVDetails.swift */; };
+		EFFED115298B38E1009436B5 /* TVSeason.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED114298B38E1009436B5 /* TVSeason.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +85,10 @@
 		EFCB767C297A07090034CD8B /* Watch-List-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Watch-List-Info.plist"; sourceTree = SOURCE_ROOT; };
 		EFCB767D297A0E340034CD8B /* MediaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaListView.swift; sourceTree = "<group>"; };
 		EFCB767F297A0EAB0034CD8B /* MediaState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaState.swift; sourceTree = "<group>"; };
+		EFFED10E298B2E02009436B5 /* MovieDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetails.swift; sourceTree = "<group>"; };
+		EFFED110298B33AF009436B5 /* MediaDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaDetails.swift; sourceTree = "<group>"; };
+		EFFED112298B388B009436B5 /* TVDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVDetails.swift; sourceTree = "<group>"; };
+		EFFED114298B38E1009436B5 /* TVSeason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVSeason.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +214,10 @@
 				EFCB766D2975E9540034CD8B /* Storage.swift */,
 				EFCB766F29760BB30034CD8B /* MediaResponse.swift */,
 				EFCB767129760BC40034CD8B /* Media.swift */,
+				EFFED110298B33AF009436B5 /* MediaDetails.swift */,
+				EFFED10E298B2E02009436B5 /* MovieDetails.swift */,
+				EFFED112298B388B009436B5 /* TVDetails.swift */,
+				EFFED114298B38E1009436B5 /* TVSeason.swift */,
 				EF49CF70297C739200B5DDD1 /* MediaType.swift */,
 				EFCB767429760BE20034CD8B /* WatchProviderResponse.swift */,
 				EFCB767629760BF30034CD8B /* WatchProviderRegion.swift */,
@@ -355,13 +367,17 @@
 				EFCB767B297611980034CD8B /* AboutView.swift in Sources */,
 				EFCB767529760BE20034CD8B /* WatchProviderResponse.swift in Sources */,
 				EFCB766A2975DE090034CD8B /* MediaView.swift in Sources */,
+				EFFED113298B388B009436B5 /* TVDetails.swift in Sources */,
 				EFCB76682975D3310034CD8B /* SearchView.swift in Sources */,
+				EFFED10F298B2E02009436B5 /* MovieDetails.swift in Sources */,
 				EF49CF77297C817600B5DDD1 /* RemoteImageView.swift in Sources */,
 				EFCB763E2975D2F00034CD8B /* Watch_ListApp.swift in Sources */,
 				EFCB767029760BB30034CD8B /* MediaResponse.swift in Sources */,
+				EFFED111298B33AF009436B5 /* MediaDetails.swift in Sources */,
 				EF49CF71297C739200B5DDD1 /* MediaType.swift in Sources */,
 				EFCB767229760BC40034CD8B /* Media.swift in Sources */,
 				EFCB767E297A0E340034CD8B /* MediaListView.swift in Sources */,
+				EFFED115298B38E1009436B5 /* TVSeason.swift in Sources */,
 				EF49CF78297C817600B5DDD1 /* CachedImageLoader.swift in Sources */,
 				EF49CF73297C777000B5DDD1 /* MediaListRow.swift in Sources */,
 				EFCB766E2975E9540034CD8B /* Storage.swift in Sources */,

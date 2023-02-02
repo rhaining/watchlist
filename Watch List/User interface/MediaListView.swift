@@ -65,10 +65,14 @@ struct MediaListView: View {
                     }
                 }
                 .onMove(perform: canMoveItems ? { source, destination in
-                    storage.moveWithinList(mediaState: mediaState, from: source, to: destination)
+                    Task.init {
+                        await storage.moveWithinList(mediaState: mediaState, from: source, to: destination)
+                    }
                 } : nil)
                 .onDelete { source in
-                    storage.delete(from: mediaState, indexSet: source)
+                    Task.init {
+                        await storage.delete(from: mediaState, indexSet: source)
+                    }
                 }
             }
         }

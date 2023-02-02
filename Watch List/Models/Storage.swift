@@ -7,6 +7,10 @@
 
 import Foundation
 
+@globalActor actor MyGlobalActor {
+    static let shared = MyGlobalActor()
+}
+
 final class Storage: ObservableObject {
     static let shared = Storage()
 
@@ -39,7 +43,9 @@ final class Storage: ObservableObject {
         let shortlist = readFrom(fileUrl: shortlistURL)
         if shortlist.count > 0 {
             watchlist.insert(contentsOf: shortlist, at: 0)
-            save()
+            Task.init {
+                await save()
+            }
             do {
                 try FileManager.default.removeItem(at: shortlistURL)
             } catch {
@@ -48,6 +54,9 @@ final class Storage: ObservableObject {
         }
     }
     
+    /**
+     File Tasks
+     */
     private func readFromDisk() {
         self.watchlist = readFrom(fileUrl: watchlistURL)
         self.watchedMedia = readFrom(fileUrl: watchedURL)
@@ -64,7 +73,7 @@ final class Storage: ObservableObject {
         }
     }
     
-    private func save(fileUrl: URL, media: [Media]) {
+    @MyGlobalActor private func save(fileUrl: URL, media: [Media]) {
         do {
             let jsonData = try JSONEncoder.tmdb.encode(media)
             try jsonData.write(to: fileUrl)
@@ -73,11 +82,18 @@ final class Storage: ObservableObject {
         }
     }
     
-    private func save() {
+    @MyGlobalActor private func save() {
         save(fileUrl: watchlistURL, media: watchlist);
         save(fileUrl: watchedURL, media: watchedMedia);
     }
     
+    
+    
+    
+    
+    /**
+     READ FUNCTIONS FROM MEDIA LISTS
+     */
     func mediaList(for mediaState: MediaState) -> [Media] {
         let mediaList: [Media]
         switch mediaState {
@@ -89,7 +105,18 @@ final class Storage: ObservableObject {
         return mediaList
     }
     
-    func set(mediaList: [Media], for mediaState: MediaState) {
+    func isOnList(_ mediaState: MediaState, media: Media) -> Bool {
+        return mediaList(for: mediaState).contains(media)
+    }
+    
+    
+    
+    
+    /**
+     WRITE FUNCTIONS TO MEDIA LISTS
+     */
+    @MainActor private func set(mediaList: [Media], for mediaState: MediaState) {
+        NSLog("set \(Thread.isMainThread)")
         switch mediaState {
             case .watchlist:
                 watchlist = mediaList
@@ -98,37 +125,34 @@ final class Storage: ObservableObject {
         }
     }
     
-    func isOnList(_ mediaState: MediaState, media: Media) -> Bool {
-        return mediaList(for: mediaState).contains(media)
-    }
-    
-    
-    func remove(_ oldMedia: Media) {
+    @MainActor func remove(_ oldMedia: Media, save: Bool = false) async {
         watchlist.removeAll { m in
             return oldMedia == m
         }
         watchedMedia.removeAll { m in
             return oldMedia == m
         }
-        save()
+        if save {
+            await self.save()
+        }
     }
     
-    func delete(from mediaState: MediaState, indexSet: IndexSet) {
+    func delete(from mediaState: MediaState, indexSet: IndexSet) async {
         var mediaList = mediaList(for: mediaState)
         mediaList.remove(atOffsets: indexSet)
-        set(mediaList: mediaList, for: mediaState)
-        save()
+        await set(mediaList: mediaList, for: mediaState)
+        await save()
     }
     
-    func moveWithinList(mediaState: MediaState, from source: IndexSet, to destination: Int) {
+    func moveWithinList(mediaState: MediaState, from source: IndexSet, to destination: Int) async {
         var mediaList = mediaList(for: mediaState)
         mediaList.move(fromOffsets: source, toOffset: destination)
-        set(mediaList: mediaList, for: mediaState)
-        save()
+        await set(mediaList: mediaList, for: mediaState)
+        await save()
     }
    
-    func move(media: Media, to mediaState: MediaState) {
-        remove(media)
+    func move(media: Media, to mediaState: MediaState) async {
+        await remove(media)
         
         var copyMedia = media
         if mediaState == .watched {
@@ -137,8 +161,22 @@ final class Storage: ObservableObject {
         
         var mediaList = mediaList(for: mediaState)
         mediaList.insert(copyMedia, at: 0)
-        set(mediaList: mediaList, for: mediaState)
-        save()
+        await set(mediaList: mediaList, for: mediaState)
+        await save()
     }
 
+    func replace(media: Media, with updatedMedia: Media) async {
+        var shouldSave = false
+        for mediaState in MediaState.allCases {
+            var mediaList = mediaList(for: mediaState)
+            if let index = mediaList.firstIndex(of: media) {
+                mediaList[index] = updatedMedia
+                await set(mediaList: mediaList, for: mediaState)
+                shouldSave = true
+            }
+        }
+        if shouldSave {
+            await save()
+        }
+    }
 }

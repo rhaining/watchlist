@@ -32,3 +32,12 @@ extension JSONEncoder {
         return tmdb
     }()
 }
+
+extension DateComponentsFormatter {
+    static let tmdb: DateComponentsFormatter = {
+        let tmdb = DateComponentsFormatter()
+        tmdb.allowedUnits = [.hour, .minute]
+        tmdb.unitsStyle = .positional
+        return tmdb
+    }()
+}

@@ -10,10 +10,16 @@ import SwiftUI
 
 struct MediaView: View {
     let media: Media
+    @State private var mediaDetails: MediaDetails?
     @ObservedObject var storage = Storage.shared
     @State private var watchProviderRegion: WatchProviderRegion?
     @State private var exposeFullOverview = false
     @State private var mediaState: MediaState?
+    
+    init(media: Media) {
+        self.media = media
+        self.mediaDetails = media.details
+    }
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -47,6 +53,19 @@ struct MediaView: View {
             }
             
             VStack(spacing: 10) {
+                if let details = mediaDetails ?? media.details {
+                    switch details {
+                        case .movie(let details):
+                            if let runtime = details.readableRuntime() {
+                                Text("Runtime: \(runtime)")
+                            }
+                            
+                        case .tv(let details):
+                            if let seasons = details.seasons {
+                                Text("\(seasons.count) Seasons")
+                            }
+                    }
+                }
                 if let watchedAt = media.watchedAt {
                     Text("Watched on: " + dateFormatter.string(from: watchedAt))
                 }
@@ -123,6 +142,7 @@ struct MediaView: View {
         .onAppear(perform: {
             updateMediaState()
             loadWatchProviders()
+            loadDetails()
         })
     }
     
@@ -139,8 +159,10 @@ struct MediaView: View {
     
     private var addToWatchlistButton: some View {
         Button(action: {
-            storage.move(media: media, to: .watchlist)
-            updateMediaState()
+            Task.init {
+                await storage.move(media: media, to: .watchlist)
+                updateMediaState()
+            }
         }) {
             HStack {
                 Image(systemName: MediaState.watchlist.imageName)
@@ -171,8 +193,10 @@ struct MediaView: View {
     
     private var markAsWatchedButton: some View {
         Button(action: {
-            storage.move(media: media, to: .watched)
-            updateMediaState()
+            Task.init {
+                await storage.move(media: media, to: .watched)
+                updateMediaState()
+            }
         }) {
             HStack {
                 Image(systemName: MediaState.watched.imageName)
@@ -188,8 +212,10 @@ struct MediaView: View {
     
     private var removeMediaButton: some View {
         Button(action: {
-            storage.remove(media)
-            updateMediaState()
+            Task.init {
+                await storage.remove(media, save: true)
+                updateMediaState()
+            }
         }) {
             HStack {
                 Image(systemName: "trash")
@@ -217,6 +243,38 @@ struct MediaView: View {
                     
                 } catch {
                     NSLog("loadWatchProviders error \(error)")
+                }
+            }.resume()
+        }
+    }
+    
+    func loadDetails() {
+        let urlStr = "https://api.themoviedb.org/3/\(media.mediaType.rawValue)/\(media.id)?api_key=\(Constants.apiKey)"
+        
+        if let url = URL(string: urlStr) {
+            let request = URLRequest(url: url);
+            URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
+                guard let data = data else { return }
+                do {
+                    var updatedMedia = media
+                    switch media.mediaType {
+                        case .movie:
+                            let movieDetails = try JSONDecoder.tmdb.decode(MovieDetails.self, from: data)
+                            updatedMedia.details = .movie(movieDetails)
+                            
+                        case .tv:
+                            let tvDetails = try JSONDecoder.tmdb.decode(TVDetails.self, from: data)
+                            updatedMedia.details = .tv(tvDetails)
+                            
+                        case .all, .person:
+                            break
+                    }
+                    self.mediaDetails = updatedMedia.details
+                    Task.init {
+                        await Storage.shared.replace(media: media, with: updatedMedia)
+                    }
+                } catch {
+                    NSLog("loadDetails error \(error)")
                 }
             }.resume()
         }
