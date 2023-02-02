@@ -116,7 +116,6 @@ final class Storage: ObservableObject {
      WRITE FUNCTIONS TO MEDIA LISTS
      */
     @MainActor private func set(mediaList: [Media], for mediaState: MediaState) {
-        NSLog("set \(Thread.isMainThread)")
         switch mediaState {
             case .watchlist:
                 watchlist = mediaList

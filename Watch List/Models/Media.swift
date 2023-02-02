@@ -10,22 +10,27 @@ import Foundation
 
 struct Media: Codable, Identifiable, Equatable, Hashable {
     let posterPath: String?
-    var posterUrl: URL? {
-        guard let posterPath = posterPath, let url = URL(string: "https://image.tmdb.org/t/p/w342\(posterPath)") else { return nil }
+    var originalPosterUrl: URL? {
+        guard let posterPath = posterPath else { return nil }
         
-        return url
+        return URL(string: "https://image.tmdb.org/t/p/original\(posterPath)")
+    }
+    var posterUrl: URL? {
+        guard let posterPath = posterPath else { return nil }
+        
+        return URL(string: "https://image.tmdb.org/t/p/w342\(posterPath)")
     }
     var thumbnailUrl: URL? {
-        guard let posterPath = posterPath, let url = URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)") else { return nil }
+        guard let posterPath = posterPath  else { return nil }
         
-        return url
+        return URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)")
     }
     
     let backdropPath: String?
     var backdropUrl: URL? {
-        guard let backdropPath = backdropPath, let url = URL(string: "https://image.tmdb.org/t/p/w300\(backdropPath)") else { return nil }
+        guard let backdropPath = backdropPath else { return nil }
         
-        return url
+        return URL(string: "https://image.tmdb.org/t/p/w300\(backdropPath)")
     }
 
     let id: Int

@@ -15,6 +15,7 @@ struct MediaView: View {
     @State private var watchProviderRegion: WatchProviderRegion?
     @State private var exposeFullOverview = false
     @State private var mediaState: MediaState?
+    @State private var enableOverlay: Bool = false
     
     init(media: Media) {
         self.media = media
@@ -125,7 +126,27 @@ struct MediaView: View {
         }
         .navigationTitle(media.title ?? media.name ?? "")
         .toolbarBackground(.visible, for: .navigationBar)
-        .navigationBarItems(trailing: media.year != nil ? Text("(\(media.year!))") : nil)
+        .navigationBarItems(
+            trailing:
+                HStack {
+                    if let year = media.year {
+                        Text("(\(year))")
+                            .font(.system(size: 13))
+                    }
+                    if let posterUrl = media.posterUrl ?? media.backdropUrl {
+                        Button(action: toggleOverlay) {
+                            AsyncImage(url: posterUrl){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 40)
+                            } placeholder: {
+                                Color.purple.opacity(0.01)
+                            }
+                        }
+                    }
+                }
+        )
         .background{
             if let posterUrl = media.backdropUrl ?? media.posterUrl {
                 AsyncImage(url: posterUrl){ image in
@@ -139,11 +160,31 @@ struct MediaView: View {
                 }
             }
         }
+        .overlay {
+            if enableOverlay, let posterUrl = media.originalPosterUrl {
+                Button(action: toggleOverlay) {
+                    AsyncImage(url: posterUrl){ image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        ZStack {
+                            Color.purple.opacity(0.5)
+                            ProgressView()
+                        }
+                    }
+                }
+            }
+        }
         .onAppear(perform: {
             updateMediaState()
             loadWatchProviders()
             loadDetails()
         })
+    }
+    
+    private func toggleOverlay() {
+        enableOverlay = !enableOverlay
     }
     
     private func updateMediaState() {
