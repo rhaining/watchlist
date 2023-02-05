@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
     @State private var queryString = ""
     @State private var lastSearchedQueryString = ""
-    @State private var media: [Media]?
+    @State private var results: [Media]?
     private let columns = [GridItem(.flexible()),GridItem(.flexible())]
     @State private var isLoading = false
     @State private var task: URLSessionTask?;
@@ -20,21 +20,34 @@ struct SearchView: View {
             if isLoading {
                 ProgressView()
                     .padding(50)
-            } else if let media = media {
-                if media.count > 0 {
+            } else if let results = results {
+                if results.count > 0 {
                     LazyVGrid(columns: columns, spacing: 10){
-                        ForEach(media, id: \.id){ m in
-                            NavigationLink(value: m) {
+                        ForEach(results, id: \.id){ media in
+                            NavigationLink(value: media) {
                                 VStack {
-                                    if let thumbnailUrl = m.thumbnailUrl {
+                                    if let thumbnailUrl = media.thumbnailUrl {
                                         RemoteImageView(imageURL: thumbnailUrl)
                                             .frame(width: 150, height: 225)
                                     } else {
                                         Color.gray.opacity(0.05)
                                             .frame(width: 150, height: 225)
                                     }
-                                    Text("\(m.title ?? m.name ?? "") \(m.year != nil ? "(\(m.year!))" : "")")
+                                    Text("\(media.title ?? media.name ?? "") \(media.year != nil ? "(\(media.year!))" : "")")
                                     Spacer()
+                                }
+                                .contextMenu {
+                                    Button(action: {
+                                        Task.init {
+                                            await Storage.shared.move(media: media, to: .watchlist)
+                                        }
+                                    }) {
+                                        HStack {
+                                            Image(systemName: MediaState.watchlist.imageName)
+                                            Text("Add to watchlist")
+                                                .font(.system(size: 18))
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -57,7 +70,7 @@ struct SearchView: View {
     
     func searchContent() {
         guard queryString.count > 0, let encodedQuery = queryString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            media = nil
+            results = nil
             return
         }
         
@@ -77,7 +90,7 @@ struct SearchView: View {
                 guard let data = data else { return }
                 do {
                     let mediaReponse = try JSONDecoder.tmdb.decode(MediaResponse.self, from: data)
-                    self.media = mediaReponse.results.filter({ m in
+                    self.results = mediaReponse.results.filter({ m in
                         return (m.mediaType == .movie ||
                                 m.mediaType == .tv) && (m.title != nil || m.name != nil)
                     });

@@ -62,6 +62,19 @@ struct MediaListView: View {
                 }), id: \.id){ m in
                     NavigationLink(value: m) {
                         MediaListRow(media: m)
+                            .contextMenu {
+                                Button(action: {
+                                    Task.init {
+                                        await Storage.shared.move(media: m, to: .watched)
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: MediaState.watched.imageName)
+                                        Text("Mark as watched")
+                                            .font(.system(size: 18))
+                                    }
+                                }
+                            }
                     }
                 }
                 .onMove(perform: canMoveItems ? { source, destination in
