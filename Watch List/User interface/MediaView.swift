@@ -31,7 +31,7 @@ struct MediaView: View {
     
     func showCompactOverview() -> Bool {
         if let overview = media.overview {
-            return !exposeFullOverview && overview.count > 100;
+            return !exposeFullOverview && overview.count > 150;
         } else {
             return !exposeFullOverview
         }
@@ -43,7 +43,7 @@ struct MediaView: View {
                 if let overview = media.overview {
                     Button(showCompactOverview() ? "▹" : "▿", action: { exposeFullOverview = !exposeFullOverview })
                     
-                    Text(showCompactOverview() ? overview.prefix(100) + "…" : overview)
+                    Text(showCompactOverview() ? overview.prefix(150) + "…" : overview)
                         .foregroundColor(.white)
                         .shadow(color: .black, radius: 5)
                         .onTapGesture { exposeFullOverview = !exposeFullOverview }
@@ -102,7 +102,7 @@ struct MediaView: View {
             }
             
             removeMediaButton
-                
+                .padding(.bottom)
             
             
             
