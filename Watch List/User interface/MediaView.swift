@@ -12,7 +12,6 @@ struct MediaView: View {
     let media: Media
     @State private var mediaDetails: MediaDetails?
     @ObservedObject var storage = Storage.shared
-    @State private var watchProviderRegion: WatchProviderRegion?
     @State private var exposeFullOverview = false
     @State private var mediaState: MediaState?
     @State private var enableOverlay: Bool = false
@@ -104,35 +103,7 @@ struct MediaView: View {
             removeMediaButton
                 .padding(.bottom)
             
-            
-            
-            if let watchProviderRegion = watchProviderRegion {
-                VStack(alignment: .leading) {
-                    if let providers = watchProviderRegion.flatrate {
-                        MediaWatchProviderSectionView(title: "Available to stream:", watchProviders: providers)
-                    }
-                    if let providers = watchProviderRegion.rent {
-                        MediaWatchProviderSectionView(title: "Available to rent:", watchProviders: providers)
-                    }
-                    if let providers = watchProviderRegion.buy {
-                        MediaWatchProviderSectionView(title: "Available to buy:", watchProviders: providers)
-                    }
-                }
-
-                Text("Source: JustWatch")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .shadow(color: .black, radius: 5)
-                    .italic()
-                    .padding(.vertical, 10)
-            } else {
-                Text("Not currently available to stream")
-                    .italic()
-                    .foregroundColor(.white)
-                    .shadow(color: .black, radius: 5)
-                    .padding()
-            }
-            
+            MediaStreamingView(media: media)
         }
         .navigationTitle(media.title ?? media.name ?? "")
         .toolbarBackground(.visible, for: .navigationBar)
@@ -178,7 +149,6 @@ struct MediaView: View {
         }
         .onAppear(perform: {
             updateMediaState()
-            loadWatchProviders()
             loadDetails()
         })
     }
@@ -260,29 +230,9 @@ struct MediaView: View {
         .disabled(mediaState == nil)
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
-    }
-
+    }    
     
-    
-    func loadWatchProviders() {
-        let urlStr = "https://api.themoviedb.org/3/\(media.mediaType.rawValue)/\(media.id)/watch/providers?api_key=\(Constants.apiKey)"
-        
-        if let url = URL(string: urlStr) {
-            let request = URLRequest(url: url);
-            URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
-                guard let data = data else { return }
-                do {
-                    let watchProviderReponse = try JSONDecoder.tmdb.decode(WatchProviderResponse.self, from: data)
-                    self.watchProviderRegion = watchProviderReponse.results?["US"]
-                    
-                } catch {
-                    NSLog("loadWatchProviders error \(error)")
-                }
-            }.resume()
-        }
-    }
-    
-    func loadDetails() {
+    private func loadDetails() {
         let urlStr = "https://api.themoviedb.org/3/\(media.mediaType.rawValue)/\(media.id)?api_key=\(Constants.apiKey)"
         
         if let url = URL(string: urlStr) {

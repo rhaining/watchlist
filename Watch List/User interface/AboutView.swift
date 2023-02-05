@@ -61,6 +61,9 @@ struct AboutView: View {
                 Spacer()
             }
             
+            Text("Current region: \(Constants.watchRegion)")
+                .padding()
+            
             Text("Nota Bene: Media lists are stored locally on your phone. Backups are currently not available.")
                 .padding()
             

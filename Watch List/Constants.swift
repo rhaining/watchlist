@@ -9,4 +9,5 @@ import Foundation
 
 struct Constants {
     static let apiKey = "a64ba84aa06447ee9c02148d60b58cb4"
+    static let watchRegion = "US"
 }
