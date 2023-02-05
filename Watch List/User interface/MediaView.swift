@@ -39,19 +39,33 @@ struct MediaView: View {
     
     var body: some View {
         ScrollView {
-            if let overview = media.overview {
-                HStack(alignment: .top) {
+            HStack(alignment: .top) {
+                if let overview = media.overview {
                     Button(showCompactOverview() ? "▹" : "▿", action: { exposeFullOverview = !exposeFullOverview })
-
+                    
                     Text(showCompactOverview() ? overview.prefix(100) + "…" : overview)
                         .foregroundColor(.white)
                         .shadow(color: .black, radius: 5)
-                    
+                        .onTapGesture { exposeFullOverview = !exposeFullOverview }
+
+                } else {
                     Spacer()
                 }
-                .onTapGesture { exposeFullOverview = !exposeFullOverview }
-                .padding()
+                if let posterUrl = media.posterUrl ?? media.backdropUrl {
+                    Button(action: toggleOverlay) {
+                        AsyncImage(url: posterUrl){ image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 100)
+                        } placeholder: {
+                            Color.purple.opacity(0.01)
+                        }
+                    }
+                }
             }
+                .padding()
+            
             
             VStack(spacing: 10) {
                 if let details = mediaDetails ?? media.details {
@@ -86,15 +100,12 @@ struct MediaView: View {
                     .disabled(mediaState == .watchlist)
                 markAsWatchedButton
                     .disabled(mediaState == .watched)
-                removeMediaButton
-                    .disabled(mediaState == nil)
             }
-            .padding()
             
-            ShareLink("Share \(media.mediaType.name)", item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
-                .buttonStyle(.bordered)
-                .background(Color.white.cornerRadius(10))
-                .padding(.bottom)
+            removeMediaButton
+                .disabled(mediaState == nil)
+            
+            
             
             if let watchProviderRegion = watchProviderRegion {
                 VStack(alignment: .leading) {
@@ -130,21 +141,11 @@ struct MediaView: View {
             trailing:
                 HStack {
                     if let year = media.year {
-                        Text("(\(year))")
+                        Text(year)
                             .font(.system(size: 13))
                     }
-                    if let posterUrl = media.posterUrl ?? media.backdropUrl {
-                        Button(action: toggleOverlay) {
-                            AsyncImage(url: posterUrl){ image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 40)
-                            } placeholder: {
-                                Color.purple.opacity(0.01)
-                            }
-                        }
-                    }
+                    ShareLink(item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
+                    
                 }
         )
         .background{
@@ -208,29 +209,16 @@ struct MediaView: View {
             HStack {
                 Image(systemName: MediaState.watchlist.imageName)
                 Text("Save to watch")
-                    .font(.system(size: 14))
+                    .font(.system(size: 18))
+                    .fontWeight(.semibold)
             }
+            .foregroundColor(.blue)
+            .padding(5)
         }
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
     }
     
-//    private var moveToWatchlistButton: some View {
-//        Button(action: {
-//            storage.move(media: media, to: .watchlist)
-//            updateMediaState()
-//        }) {
-//            HStack {
-//                Image(systemName: MediaState.watchlist.imageName)
-//                Text("Move to watchlist")
-//                    .font(.system(size: 14))
-//            }
-//
-//        }
-//        .buttonStyle(.bordered)
-//        .backgroundStyle(Color.white)
-//
-//    }
     
     private var markAsWatchedButton: some View {
         Button(action: {
@@ -242,9 +230,11 @@ struct MediaView: View {
             HStack {
                 Image(systemName: MediaState.watched.imageName)
                 Text("Mark watched")
-                    .font(.system(size: 14))
+                    .font(.system(size: 18))
+                    .fontWeight(.semibold)
             }
-            
+            .foregroundColor(.blue)
+            .padding(5)
         }
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
@@ -261,9 +251,10 @@ struct MediaView: View {
             HStack {
                 Image(systemName: "trash")
                 Text("Remove")
-                    .font(.system(size: 14))
+                    .font(.system(size: 12))
             }
-            
+            .padding(5)
+            .foregroundColor(.blue)
         }
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
