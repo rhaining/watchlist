@@ -97,13 +97,12 @@ struct MediaView: View {
 
             HStack {
                 addToWatchlistButton
-                    .disabled(mediaState == .watchlist)
                 markAsWatchedButton
-                    .disabled(mediaState == .watched)
+                    
             }
             
             removeMediaButton
-                .disabled(mediaState == nil)
+                
             
             
             
@@ -210,11 +209,12 @@ struct MediaView: View {
                 Image(systemName: MediaState.watchlist.imageName)
                 Text("Save to watch")
                     .font(.system(size: 18))
-                    .fontWeight(.semibold)
+                    .fontWeight(mediaState == .watchlist ? .regular : .semibold)
             }
-            .foregroundColor(.blue)
+            .foregroundColor(mediaState == .watchlist ? .gray : .blue)
             .padding(5)
         }
+        .disabled(mediaState == .watchlist)
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
     }
@@ -231,11 +231,12 @@ struct MediaView: View {
                 Image(systemName: MediaState.watched.imageName)
                 Text("Mark watched")
                     .font(.system(size: 18))
-                    .fontWeight(.semibold)
+                    .fontWeight(mediaState == .watched ? .regular : .semibold)
             }
-            .foregroundColor(.blue)
+            .foregroundColor(mediaState == .watched ? .gray : .blue)
             .padding(5)
         }
+        .disabled(mediaState == .watched)
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
 
@@ -254,8 +255,9 @@ struct MediaView: View {
                     .font(.system(size: 12))
             }
             .padding(5)
-            .foregroundColor(.blue)
+            .foregroundColor(mediaState == nil ? .gray : .blue)
         }
+        .disabled(mediaState == nil)
         .buttonStyle(.bordered)
         .background(Color.white.cornerRadius(10))
     }
