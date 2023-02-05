@@ -178,4 +178,10 @@ final class Storage: ObservableObject {
             await save()
         }
     }
+    
+    func restoreToFactorySettings() async {
+        await set(mediaList: [], for: .watchlist)
+        await set(mediaList: [], for: .watched)
+        await save()
+    }
 }
