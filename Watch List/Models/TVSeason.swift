@@ -22,3 +22,6 @@ extension TVSeason {
         return lhs.id == rhs.id
     }
 }
+extension TVSeason {
+    static let communityOne = TVSeason(airDate: Date(timeIntervalSince1970: 30413949), episodeCount: 14, id: 129, name: "Community season 1", overview: "this is an overview", posterPath: nil, seasonNumber: 1)
+}

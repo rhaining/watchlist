@@ -37,6 +37,7 @@
 		EFFED113298B388B009436B5 /* TVDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED112298B388B009436B5 /* TVDetails.swift */; };
 		EFFED115298B38E1009436B5 /* TVSeason.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED114298B38E1009436B5 /* TVSeason.swift */; };
 		EFFED11729903E15009436B5 /* MediaStreamingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED11629903E15009436B5 /* MediaStreamingView.swift */; };
+		EFFED1192990425C009436B5 /* TVSeasonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFED1182990425C009436B5 /* TVSeasonsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		EFFED112298B388B009436B5 /* TVDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVDetails.swift; sourceTree = "<group>"; };
 		EFFED114298B38E1009436B5 /* TVSeason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVSeason.swift; sourceTree = "<group>"; };
 		EFFED11629903E15009436B5 /* MediaStreamingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaStreamingView.swift; sourceTree = "<group>"; };
+		EFFED1182990425C009436B5 /* TVSeasonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVSeasonsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				EFCB767A297611980034CD8B /* AboutView.swift */,
 				EFCB76672975D3310034CD8B /* SearchView.swift */,
 				EFCB76692975DE090034CD8B /* MediaView.swift */,
+				EFFED1182990425C009436B5 /* TVSeasonsView.swift */,
 				EFFED11629903E15009436B5 /* MediaStreamingView.swift */,
 				EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */,
 			);
@@ -367,6 +370,7 @@
 				EFCB7680297A0EAB0034CD8B /* MediaState.swift in Sources */,
 				EFCB76402975D2F00034CD8B /* ContentView.swift in Sources */,
 				EFCB767729760BF30034CD8B /* WatchProviderRegion.swift in Sources */,
+				EFFED1192990425C009436B5 /* TVSeasonsView.swift in Sources */,
 				EFCB767B297611980034CD8B /* AboutView.swift in Sources */,
 				EFCB767529760BE20034CD8B /* WatchProviderResponse.swift in Sources */,
 				EFCB766A2975DE090034CD8B /* MediaView.swift in Sources */,

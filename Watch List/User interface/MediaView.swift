@@ -75,9 +75,7 @@ struct MediaView: View {
                             }
                             
                         case .tv(let details):
-                            if let seasons = details.seasons {
-                                Text("\(seasons.count) Seasons")
-                            }
+                            TVSeasonsView(media: media, tvDetails: details)
                     }
                 }
                 if let watchedAt = media.watchedAt {

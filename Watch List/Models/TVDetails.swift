@@ -16,3 +16,7 @@ extension TVDetails {
         return lhs.id == rhs.id
     }
 }
+
+extension TVDetails {
+    static let community = TVDetails(id: 1, seasons: [.communityOne])
+}
