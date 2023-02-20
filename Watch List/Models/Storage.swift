@@ -34,24 +34,6 @@ final class Storage: ObservableObject {
 
     private init() {
         readFromDisk()
-        moveShortlistToWatchlist()
-    }
-    
-    //        can remove this later:
-    private func moveShortlistToWatchlist() {
-        let shortlistURL = fileURL(for: "shortlist.json")!
-        let shortlist = readFrom(fileUrl: shortlistURL)
-        if shortlist.count > 0 {
-            watchlist.insert(contentsOf: shortlist, at: 0)
-            Task.init {
-                await save()
-            }
-            do {
-                try FileManager.default.removeItem(at: shortlistURL)
-            } catch {
-                NSLog("error removing shortlist \(error)")
-            }
-        }
     }
     
     /**
