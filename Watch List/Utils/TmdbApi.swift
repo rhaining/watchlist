@@ -8,9 +8,12 @@
 import Foundation
 
 struct TmdbApi {
+    static let host = "api.themoviedb.org"
+    static let apiVersion = 3
+    
     static func loadSeason(tvShow: Media, seasonNumber: Int?, completion: @escaping (Result<TVSeasonDetails, Error>) -> Void) {
         guard let seasonNumber = seasonNumber else { return }
-        let urlStr = "https://api.themoviedb.org/3/\(tvShow.mediaType.rawValue)/\(tvShow.id)/season/\(seasonNumber)?api_key=\(Constants.apiKey)"
+        let urlStr = "https://\(host)/\(apiVersion)/\(tvShow.mediaType.rawValue)/\(tvShow.id)/season/\(seasonNumber)?api_key=\(Constants.apiKey)"
         
         if let url = URL(string: urlStr) {
             let request = URLRequest(url: url);
