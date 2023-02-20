@@ -18,5 +18,5 @@ extension TVDetails {
 }
 
 extension TVDetails {
-    static let community = TVDetails(id: 1, seasons: [.communityOne])
+    static let community = TVDetails(id: 1, seasons: [.communityOne, .communityOne])
 }

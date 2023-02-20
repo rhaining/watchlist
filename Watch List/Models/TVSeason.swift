@@ -16,6 +16,12 @@ struct TVSeason: Codable, Identifiable, Equatable, Hashable {
     let overview: String?
     let posterPath: String?
     let seasonNumber: Int?
+    
+    var thumbnailUrl: URL? {
+        guard let posterPath = posterPath  else { return nil }
+        
+        return URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)")
+    }
 }
 extension TVSeason {
     static func == (lhs: TVSeason, rhs: TVSeason) -> Bool {

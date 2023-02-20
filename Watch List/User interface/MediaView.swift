@@ -65,37 +65,51 @@ struct MediaView: View {
             }
                 .padding()
             
-            
             VStack(spacing: 10) {
-                if let details = mediaDetails ?? media.details {
-                    switch details {
-                        case .movie(let details):
-                            if let runtime = details.readableRuntime() {
-                                Text("Runtime: \(runtime)")
-                            }
-                            
-                        case .tv(let details):
-                            TVSeasonsView(media: media, tvDetails: details)
+                if let whatsNext = storage.getNextEpisode(tvShow: media) {
+                    VStack(spacing: 4) {
+                        Text("What's next: \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber))")
+                            .fontWeight(.semibold)
+                        Text("“\(whatsNext.name ?? "-")”")
+                            .lineLimit(1)
+                        Button("Mark \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) as watched", action: markNextEpisodeAsWhatsNext)
+                            .buttonStyle(.borderedProminent)
                     }
                 }
-                if let watchedAt = media.watchedAt {
+                if let watchedAt = media.watchedAt, mediaState == .watched {
                     Text("Watched on: " + dateFormatter.string(from: watchedAt))
-                }
-                
-                if let mediaState = mediaState {
-                    Text("Currently saved to ")
-                    + Text("\(Image(systemName: mediaState.imageName)) \(mediaState.title)")
-                        .fontWeight(.semibold)
                 }
             }
             .foregroundColor(.white)
             .shadow(color: .black, radius: 5)
             .padding()
+            
+            VStack(spacing: 10) {
+                if let details = mediaDetails ?? media.details {
+                    switch details {
+                        case .movie(let details):
+                                MovieProgressView(movie: media, details: details)
+                            
+                        case .tv(let details):
+                            TVSeasonsView(media: media, tvDetails: details)
+                    }
+                }
+            }
+            .padding()
 
+            if let mediaState = mediaState {
+                Group {
+                    Text("Currently saved to ")
+                    + Text("\(Image(systemName: mediaState.imageName)) \(mediaState.title)")
+                        .fontWeight(.semibold)
+                }
+                .foregroundColor(.white)
+                .shadow(color: .black, radius: 5)
+                .padding()
+            }
             HStack {
                 addToWatchlistButton
                 markAsWatchedButton
-                    
             }
             
             removeMediaButton
@@ -149,6 +163,44 @@ struct MediaView: View {
             updateMediaState()
             loadDetails()
         })
+    }
+    
+    private func markNextEpisodeAsWhatsNext() {
+        guard let tvEp = storage.getNextEpisode(tvShow: media),
+            let seasonNumber = tvEp.seasonNumber else { return }
+        
+        TmdbApi.loadSeason(tvShow: media, seasonNumber: seasonNumber) { result in
+            switch result {
+                case .success(let seasonDetails):
+                    if let episodes = seasonDetails.episodes,
+                       let idx = episodes.firstIndex(of: tvEp){
+                        if Int(idx) + 1 < episodes.count {
+                            let newTvEp = episodes[Int(idx)+1]
+                            Task.init {
+                                await storage.addToWhatsNext(tvShow: media, episode: newTvEp)
+                            }
+                        } else {
+                            TmdbApi.loadSeason(tvShow: media, seasonNumber: seasonNumber+1) { result in
+                                switch result {
+                                    case .success(let seasonDetails):
+                                        if let episodes = seasonDetails.episodes,
+                                           let newTvEp = episodes.first {
+                                            Task.init {
+                                                await storage.addToWhatsNext(tvShow: media, episode: newTvEp)
+                                            }
+                                        }
+                                        
+                                    case .failure(_):
+                                        break
+                                }
+                            }
+                        }
+                    }
+                    
+                case .failure(_):
+                    break
+            }
+        }
     }
     
     private func toggleOverlay() {

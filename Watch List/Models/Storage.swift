@@ -16,12 +16,16 @@ final class Storage: ObservableObject {
 
     @Published var watchlist: [Media] = []
     @Published var watchedMedia: [Media] = []
+    @Published var whatsNext: [WhatsNext] = []
     
     private var watchlistURL: URL {
         return fileURL(for: "watchlist.json")!
     }
     private var watchedURL: URL {
         return fileURL(for: "watched.json")!
+    }
+    private var tvWhatsNextURL: URL {
+        return fileURL(for: "whats_next.json")!
     }
 
     private func fileURL(for fileName: String) -> URL? {
@@ -40,24 +44,32 @@ final class Storage: ObservableObject {
      File Tasks
      */
     private func readFromDisk() {
-        self.watchlist = readFrom(fileUrl: watchlistURL)
-        self.watchedMedia = readFrom(fileUrl: watchedURL)
-    }
-    
-    private func readFrom(fileUrl: URL) -> [Media] {
         do {
-            let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
-            let jsonData = try JSONDecoder.tmdb.decode([Media].self, from: data)
-            return jsonData
+            watchlist = try readFrom(fileUrl: watchlistURL, type: [Media].self)
         } catch {
-            NSLog("Unable to read from file \(error)")
-            return []
+            NSLog("Error reading watchlist \(error)")
+        }
+        do {
+            whatsNext = try readFrom(fileUrl: tvWhatsNextURL, type: [WhatsNext].self)
+        } catch {
+            NSLog("Error reading tv whats next list \(error)")
+        }
+        do {
+            watchedMedia = try readFrom(fileUrl: watchedURL, type: [Media].self)
+        } catch {
+            NSLog("Error reading watched media \(error)")
         }
     }
+
+    private func readFrom<T>(fileUrl: URL, type: T.Type) throws -> T where T : Decodable {
+        let data = try Data(contentsOf: fileUrl, options: .mappedIfSafe)
+        let jsonData = try JSONDecoder.tmdb.decode(type, from: data)
+        return jsonData
+    }
     
-    @MyGlobalActor private func save(fileUrl: URL, media: [Media]) {
+    @MyGlobalActor private func save<T>(fileUrl: URL, value: T) where T : Encodable {
         do {
-            let jsonData = try JSONEncoder.tmdb.encode(media)
+            let jsonData = try JSONEncoder.tmdb.encode(value)
             try jsonData.write(to: fileUrl)
         } catch {
             NSLog("Unable to save \(error)")
@@ -65,8 +77,9 @@ final class Storage: ObservableObject {
     }
     
     @MyGlobalActor private func save() {
-        save(fileUrl: watchlistURL, media: watchlist);
-        save(fileUrl: watchedURL, media: watchedMedia);
+        save(fileUrl: watchlistURL, value: watchlist);
+        save(fileUrl: watchedURL, value: watchedMedia);
+        save(fileUrl: tvWhatsNextURL, value: whatsNext);
     }
     
     
@@ -165,5 +178,63 @@ final class Storage: ObservableObject {
         await set(mediaList: [], for: .watchlist)
         await set(mediaList: [], for: .watched)
         await save()
+    }
+    
+    
+    /**
+     Watchlist
+     */
+    
+    @MainActor private func set(whatsNext: [WhatsNext]) {
+        self.whatsNext = whatsNext
+    }
+    
+    func addToWhatsNext(tvShow: Media, episode: TVEpisode) async {
+        var whatsNext = self.whatsNext
+        whatsNext.removeAll { wn in
+            wn.media == tvShow
+        }
+        whatsNext.append(WhatsNext(tvShow: tvShow, tvEp: episode))
+        await set(whatsNext: whatsNext)
+        await save()
+    }
+    
+    func addToWhatsNext(movie: Media, progress: Int) async {
+        var whatsNext = self.whatsNext
+        whatsNext.removeAll { wn in
+            wn.media == movie
+        }
+        whatsNext.append(WhatsNext(movie: movie, movieProgress: progress))
+        await set(whatsNext: whatsNext)
+        await save()
+    }
+    
+     func removeFromWhatsNext(media: Media) async {
+        var whatsNext = self.whatsNext
+        whatsNext.removeAll { wn in
+            wn.media == media
+        }
+        await set(whatsNext: whatsNext)
+        await save()
+    }
+    
+    func getNextEpisode(tvShow: Media) -> TVEpisode? {
+        guard tvShow.mediaType == .tv else { return nil }
+        
+        return whatsNext
+            .first { wn in
+                wn.media == tvShow
+            }?
+            .tvEp
+    }
+    
+    func getMovieProgress(movie: Media) -> Int? {
+        guard movie.mediaType == .movie else { return nil }
+        
+        return whatsNext
+            .first { wn in
+                wn.media == movie
+            }?
+            .movieProgress
     }
 }

@@ -38,6 +38,18 @@ extension DateComponentsFormatter {
         let tmdb = DateComponentsFormatter()
         tmdb.allowedUnits = [.hour, .minute]
         tmdb.unitsStyle = .positional
+        tmdb.zeroFormattingBehavior = .pad
         return tmdb
     }()
+    
+    func movieTime(from: TimeInterval) -> String? {
+        return movieTime(from: Int(from))
+    }
+    func movieTime(from: Int) -> String? {
+        guard var movieTime = string(from: TimeInterval(from * 60)) else { return nil }
+        if movieTime.starts(with: "0") {
+            movieTime.removeFirst()
+        }
+        return movieTime
+    }
 }

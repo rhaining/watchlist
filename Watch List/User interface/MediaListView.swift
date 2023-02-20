@@ -43,6 +43,10 @@ struct MediaListView: View {
             if mediaList.count == 0 {
                 Text("No items found.")
             } else {
+                if mediaState == .watchlist {
+                    WhatsNextView()
+                }
+                
                 Picker("Filter", selection: $mediaTypeFilter) {
                     Text("All").tag(MediaType.all)
                     Text("Movie").tag(MediaType.movie)

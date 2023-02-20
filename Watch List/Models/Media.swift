@@ -59,7 +59,7 @@ struct Media: Codable, Identifiable, Equatable, Hashable {
 
 extension Media {
     static func == (lhs: Media, rhs: Media) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.mediaType == rhs.mediaType && lhs.id == rhs.id
     }
 }
 
