@@ -15,6 +15,9 @@ struct MediaListView: View {
     let mediaState: MediaState
     @State private var mediaTypeFilter: MediaType = .all
     @ObservedObject private var storage = Storage.shared
+    @State private var randomize = false
+    
+    @State private var navPath: [Media] = []
     
     init(mediaState: MediaState) {
         self.mediaState = mediaState
@@ -39,69 +42,85 @@ struct MediaListView: View {
     }
         
     var body: some View {
-        List {
-            if mediaList.count == 0 {
-                Text("No items found.")
-            } else {
-                if mediaState == .watchlist {
-                    WhatsNextView()
-                }
-                
-                Picker("Filter", selection: $mediaTypeFilter) {
-                    Text("All").tag(MediaType.all)
-                    Text("Movie").tag(MediaType.movie)
-                    Text("TV").tag(MediaType.tv)
-                }
-                .pickerStyle(.segmented)
-
-                ForEach(mediaList.filter({ m in
-                    switch mediaTypeFilter {
-                        case .all:
-                            return true
-                        case .movie, .tv:
-                            return m.mediaType == mediaTypeFilter
-                        case .person:
-                            return false
+        NavigationStack(path: $navPath) {
+            List {
+                if mediaList.count == 0 {
+                    Text("No items found.")
+                } else {
+                    if mediaState == .watchlist {
+                        WhatsNextView()
                     }
-                }), id: \.id){ m in
-                    NavigationLink(value: m) {
-                        MediaListRow(media: m)
-                            .contextMenu {
-                                Button(action: {
-                                    Task.init {
-                                        await Storage.shared.move(media: m, to: .watched)
-                                    }
-                                }) {
-                                    HStack {
-                                        Image(systemName: MediaState.watched.imageName)
-                                        Text("Mark as watched")
-                                            .font(.system(size: 18))
+                    
+                    HStack {
+                        Picker("Filter", selection: $mediaTypeFilter) {
+                            Text("All").tag(MediaType.all)
+                            Text("Movie").tag(MediaType.movie)
+                            Text("TV").tag(MediaType.tv)
+                        }
+                        .pickerStyle(.segmented)
+                        
+                        Button(action: { randomize = true }) {
+                            Image(systemName: "wand.and.stars")
+                        }
+                    }
+                    ForEach(mediaList.filter({ m in
+                        switch mediaTypeFilter {
+                            case .all:
+                                return true
+                            case .movie, .tv:
+                                return m.mediaType == mediaTypeFilter
+                            case .person:
+                                return false
+                        }
+                    }), id: \.id){ m in
+                        NavigationLink(value: m) {
+                            MediaListRow(media: m)
+                                .contextMenu {
+                                    Button(action: {
+                                        Task.init {
+                                            await Storage.shared.move(media: m, to: .watched)
+                                        }
+                                    }) {
+                                        HStack {
+                                            Image(systemName: MediaState.watched.imageName)
+                                            Text("Mark as watched")
+                                                .font(.system(size: 18))
+                                        }
                                     }
                                 }
-                            }
+                        }
                     }
-                }
-                .onMove(perform: canMoveItems ? { source, destination in
-                    Task.init {
-                        await storage.moveWithinList(mediaState: mediaState, from: source, to: destination)
-                    }
-                } : nil)
-                .onDelete { source in
-                    Task.init {
-                        await storage.delete(from: mediaState, indexSet: source)
+                    .onMove(perform: canMoveItems ? { source, destination in
+                        Task.init {
+                            await storage.moveWithinList(mediaState: mediaState, from: source, to: destination)
+                        }
+                    } : nil)
+                    .onDelete { source in
+                        Task.init {
+                            await storage.delete(from: mediaState, indexSet: source)
+                        }
                     }
                 }
             }
+            .navigationDestination(for: Media.self) { m in
+                MediaView(media: m)
+            }
+            .navigationTitle(mediaState.title)
+            .navigationBarItems(leading: Image(systemName: mediaState.imageName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
+            .toolbar {
+                EditButton()
+                    .disabled(mediaList.count == 0)
+            }
+            .sheet(isPresented: $randomize) {
+                RandomizerView() { media in
+                    guard let media = media else { return }
+                    
+                    navPath.append(media)
+                    randomize = false
+                }
+            }
         }
-        .navigationDestination(for: Media.self) { m in
-            MediaView(media: m)
-        }
-        .navigationTitle(mediaState.title)
-        .navigationBarItems(leading: Image(systemName: mediaState.imageName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
-        .toolbar {
-            EditButton()
-                .disabled(mediaList.count == 0)
-        }
+        
     }
 }
 

@@ -19,6 +19,7 @@
 		EFB8BD3429A3DEE600715579 /* MovieProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD3329A3DEE600715579 /* MovieProgressView.swift */; };
 		EFB8BD3629A3EAD000715579 /* String~SeasonEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD3529A3EAD000715579 /* String~SeasonEpisode.swift */; };
 		EFB8BD3829A4200F00715579 /* TmdbApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD3729A4200F00715579 /* TmdbApi.swift */; };
+		EFB8BD3A29A42A1500715579 /* RandomizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD3929A42A1500715579 /* RandomizerView.swift */; };
 		EFCB763E2975D2F00034CD8B /* Watch_ListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB763D2975D2F00034CD8B /* Watch_ListApp.swift */; };
 		EFCB76402975D2F00034CD8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCB763F2975D2F00034CD8B /* ContentView.swift */; };
 		EFCB76422975D2F20034CD8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFCB76412975D2F20034CD8B /* Assets.xcassets */; };
@@ -77,6 +78,7 @@
 		EFB8BD3329A3DEE600715579 /* MovieProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieProgressView.swift; sourceTree = "<group>"; };
 		EFB8BD3529A3EAD000715579 /* String~SeasonEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String~SeasonEpisode.swift"; sourceTree = "<group>"; };
 		EFB8BD3729A4200F00715579 /* TmdbApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbApi.swift; sourceTree = "<group>"; };
+		EFB8BD3929A42A1500715579 /* RandomizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomizerView.swift; sourceTree = "<group>"; };
 		EFCB763A2975D2F00034CD8B /* Watch List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Watch List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFCB763D2975D2F00034CD8B /* Watch_ListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Watch_ListApp.swift; sourceTree = "<group>"; };
 		EFCB763F2975D2F00034CD8B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				EFFED11629903E15009436B5 /* MediaStreamingView.swift */,
 				EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */,
 				EFCB767A297611980034CD8B /* AboutView.swift */,
+				EFB8BD3929A42A1500715579 /* RandomizerView.swift */,
 			);
 			path = "User interface";
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 				EFB8BD3629A3EAD000715579 /* String~SeasonEpisode.swift in Sources */,
 				EF49CF73297C777000B5DDD1 /* MediaListRow.swift in Sources */,
 				EFB8BD3829A4200F00715579 /* TmdbApi.swift in Sources */,
+				EFB8BD3A29A42A1500715579 /* RandomizerView.swift in Sources */,
 				EFB8BD3229A3D9F700715579 /* WhatsNext.swift in Sources */,
 				EFCB766E2975E9540034CD8B /* Storage.swift in Sources */,
 			);
