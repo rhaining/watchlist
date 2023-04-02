@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF034A8929D9ED64001750A6 /* TmdbError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF034A8829D9ED64001750A6 /* TmdbError.swift */; };
 		EF49CF6F297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */; };
 		EF49CF71297C739200B5DDD1 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF70297C739200B5DDD1 /* MediaType.swift */; };
 		EF49CF73297C777000B5DDD1 /* MediaListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF72297C777000B5DDD1 /* MediaListRow.swift */; };
@@ -66,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EF034A8829D9ED64001750A6 /* TmdbError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbError.swift; sourceTree = "<group>"; };
 		EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWatchProviderSectionView.swift; sourceTree = "<group>"; };
 		EF49CF70297C739200B5DDD1 /* MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 		EF49CF72297C777000B5DDD1 /* MediaListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaListRow.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				EF49CF79297DB58400B5DDD1 /* TMDBCoders.swift */,
 				EFB8BD3529A3EAD000715579 /* String~SeasonEpisode.swift */,
 				EFB8BD3729A4200F00715579 /* TmdbApi.swift */,
+				EF034A8829D9ED64001750A6 /* TmdbError.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -397,6 +400,7 @@
 				EFFED1192990425C009436B5 /* TVSeasonsView.swift in Sources */,
 				EFCB767B297611980034CD8B /* AboutView.swift in Sources */,
 				EFB8BD2E29A3CB9100715579 /* TVEpisode.swift in Sources */,
+				EF034A8929D9ED64001750A6 /* TmdbError.swift in Sources */,
 				EFCB767529760BE20034CD8B /* WatchProviderResponse.swift in Sources */,
 				EFCB766A2975DE090034CD8B /* MediaView.swift in Sources */,
 				EFB8BD3429A3DEE600715579 /* MovieProgressView.swift in Sources */,

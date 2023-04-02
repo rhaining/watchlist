@@ -19,6 +19,12 @@ struct TmdbApi {
             let request = URLRequest(url: url);
             URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
                 guard let data = data else { return }
+                
+                if let httpReponse = response as? HTTPURLResponse, httpReponse.statusCode == 404 {
+                    completion(.failure(TmdbError.seasonNotFound))
+                    return
+                }
+                
                 do {
                     let seasonDetails = try JSONDecoder.tmdb.decode(TVSeasonDetails.self, from: data)
                     completion(.success(seasonDetails))

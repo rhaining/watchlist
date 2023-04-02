@@ -190,8 +190,14 @@ struct MediaView: View {
                                             }
                                         }
                                         
-                                    case .failure(_):
-                                        break
+                                    case .failure(let error):
+                                        if let tmdbError = error as? TmdbError, tmdbError == .seasonNotFound {
+                                            Task.init {
+                                                await storage.removeFromWhatsNext(media: media)
+                                            }
+                                        } else {
+                                            NSLog("unknown error \(error)")
+                                        }
                                 }
                             }
                         }
