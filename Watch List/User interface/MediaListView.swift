@@ -40,6 +40,19 @@ struct MediaListView: View {
     private var canMoveItems: Bool {
         return mediaState == .watchlist
     }
+    
+    private var filteredMedia: [Media] {
+        return mediaList.filter({ m in
+            switch mediaTypeFilter {
+                case .all:
+                    return true
+                case .movie, .tv:
+                    return m.mediaType == mediaTypeFilter
+                case .person:
+                    return false
+            }
+        })
+    }
         
     var body: some View {
         NavigationStack(path: $navPath) {
@@ -63,16 +76,7 @@ struct MediaListView: View {
                             Image(systemName: "wand.and.stars")
                         }
                     }
-                    ForEach(mediaList.filter({ m in
-                        switch mediaTypeFilter {
-                            case .all:
-                                return true
-                            case .movie, .tv:
-                                return m.mediaType == mediaTypeFilter
-                            case .person:
-                                return false
-                        }
-                    }), id: \.id){ m in
+                    ForEach(filteredMedia, id: \.id){ m in
                         NavigationLink(value: m) {
                             MediaListRow(media: m)
                                 .contextMenu {
@@ -112,7 +116,7 @@ struct MediaListView: View {
                     .disabled(mediaList.count == 0)
             }
             .sheet(isPresented: $randomize) {
-                RandomizerView() { media in
+                RandomizerView(mediaList: filteredMedia) { media in
                     guard let media = media else { return }
                     
                     navPath.append(media)

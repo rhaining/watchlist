@@ -10,10 +10,10 @@ import SwiftUI
 struct RandomizerView: View {
     @Environment(\.dismiss) var dismiss
     
-    @ObservedObject private var storage = Storage.shared
     @State private var media: Media?
     @State private var timer: Timer?
     
+    let mediaList: [Media]
     let watchIt: (Media?) -> Void
 
     var body: some View {
@@ -29,6 +29,7 @@ struct RandomizerView: View {
                                 image
                                     .resizable()
                                     .scaledToFit()
+                                    .aspectRatio(contentMode: .fit)
                                     .frame(height: 300)
                             } placeholder: {
                                 Color.purple.opacity(0.01)
@@ -44,6 +45,13 @@ struct RandomizerView: View {
             }
             Spacer()
         }
+        .overlay(alignment: .topTrailing) {
+            Button(action: randomize) {
+                Image(systemName: "wand.and.stars")
+                    .padding()
+            }
+            .padding()
+        }
         .overlay(alignment: .bottomTrailing) {
             Button("Cancel") {
                 dismiss()
@@ -58,7 +66,7 @@ struct RandomizerView: View {
         guard timer == nil else { return }
         let start = Date()
         timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
-            media = storage.watchlist.randomElement()
+            media = mediaList.randomElement()
             if start.timeIntervalSinceNow < -2 {
                 timer.invalidate()
                 self.timer = nil
@@ -70,6 +78,6 @@ struct RandomizerView: View {
 
 struct RandomizerView_Previews: PreviewProvider {
     static var previews: some View {
-        RandomizerView() { media in }
+        RandomizerView(mediaList: [.previewGodfather, .previewWonderYears]) { media in }
     }
 }
