@@ -45,8 +45,8 @@ extension DateComponentsFormatter {
     func movieTime(from: TimeInterval) -> String? {
         return movieTime(from: Int(from))
     }
-    func movieTime(from: Int) -> String? {
-        guard var movieTime = string(from: TimeInterval(from * 60)) else { return nil }
+    func movieTime(from: Int?) -> String? {
+        guard let from = from, var movieTime = string(from: TimeInterval(from * 60)) else { return nil }
         if movieTime.starts(with: "0") {
             movieTime.removeFirst()
         }

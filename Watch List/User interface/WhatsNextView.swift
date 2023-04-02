@@ -24,29 +24,15 @@ struct WhatsNextView: View {
                         NavigationLink(value: whatsNextItem.media) {
                             VStack {
                                 if let tvEp = whatsNextItem.tvEp {
-                                    if let imageUrl = tvEp.stillUrl {
-                                        RemoteImageView(imageURL: imageUrl)
-                                            .frame(width: 100, height: 100)
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipped()
-                                    }
-                                    Text(whatsNextItem.media.name ?? "")
-                                        .lineLimit(1)
-                                    Text(String.episodeDescriptor(season: tvEp.seasonNumber, episode: tvEp.episodeNumber))
-                                        .font(.caption)
+                                    whatsNextCell(imageUrl: tvEp.stillUrl ?? whatsNextItem.media.thumbnailUrl,
+                                                  title: whatsNextItem.media.name,
+                                                  caption: .episodeDescriptor(season: tvEp.seasonNumber, episode: tvEp.episodeNumber)
+                                    )
                                 } else if let movie = whatsNextItem.media, movie.mediaType == .movie {
-                                    if let imageUrl = movie.posterUrl {
-                                        RemoteImageView(imageURL: imageUrl)
-                                            .frame(width: 100, height: 100)
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipped()
-                                    }
-                                    Text(whatsNextItem.media.title ?? "")
-                                        .lineLimit(1)
-                                    if let movieProgress = whatsNextItem.movieProgress {
-                                        Text("\(DateComponentsFormatter.tmdb.movieTime(from: movieProgress) ?? "")")
-                                            .font(.caption)
-                                    }
+                                    whatsNextCell(imageUrl: movie.posterUrl,
+                                                  title: whatsNextItem.media.title,
+                                                  caption: movieProgressCaption(for: whatsNextItem)
+                                    )
                                 }
                             }
                             .frame(width: 100)
@@ -55,7 +41,28 @@ struct WhatsNextView: View {
                 }
             }
         }
-
+    }
+    
+    func movieProgressCaption(for whatsNextItem: WhatsNext) -> String? {
+        if let progress = DateComponentsFormatter.tmdb.movieTime(from: whatsNextItem.movieProgress) {
+            return "⏱️ \(progress)"
+        } else {
+            return nil
+        }
+    }
+    
+    func whatsNextCell(imageUrl: URL?, title: String?, caption: String?) -> some View {
+        VStack {
+            if let imageUrl = imageUrl {
+                RemoteImageView(imageURL: imageUrl)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
+            }
+            Text(title ?? "")
+                .lineLimit(1)
+            Text(caption ?? "")
+                .font(.caption)
+        }
     }
 }
 
