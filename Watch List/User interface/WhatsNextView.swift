@@ -12,7 +12,7 @@ struct WhatsNextView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("What's next")
+            Text("Okay, what's next?")
             
             ScrollView(.horizontal, showsIndicators: true) {
                 HStack {
