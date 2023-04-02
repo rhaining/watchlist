@@ -13,6 +13,7 @@ struct WhatsNextView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Okay, what's next?")
+                .fontWeight(.black)
             
             ScrollView(.horizontal, showsIndicators: true) {
                 HStack {
@@ -35,7 +36,8 @@ struct WhatsNextView: View {
                                     )
                                 }
                             }
-                            .frame(width: 100)
+                            .frame(width: 90)
+                            .padding(.bottom)
                         }
                     }
                 }
@@ -56,7 +58,7 @@ struct WhatsNextView: View {
             if let imageUrl = imageUrl {
                 RemoteImageView(imageURL: imageUrl)
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
+                    .frame(width: 90, height: 90)
             }
             Text(title ?? "")
                 .lineLimit(1)
