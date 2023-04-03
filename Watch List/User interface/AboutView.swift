@@ -11,69 +11,71 @@ struct AboutView: View {
     @State private var displayPrompt: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("TV Plus Plus is brought to you by Robert Tolar Haining.")
-                .padding()
-            
-            Text("Check out more projects at:")
-                .padding(.horizontal)
-            
-            HStack {
-                Spacer()
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text("TV Plus Plus is brought to you by Robert Tolar Haining.")
+                    .padding()
                 
-                Link("kindofawesome.com", destination: URL(string: "https://kindofawesome.com/")!)
-                    .buttonStyle(.bordered)
-
-                Spacer()
-            }
-            
-            
-            Text("Search provided by The Movie Database, and streaming data by Just Watch.")
-                .padding(.horizontal)
-                .padding(.top)
-            
-            HStack {
-                Spacer()
+                Text("Check out more projects at:")
+                    .padding(.horizontal)
                 
-                Link(destination: URL(string: "https://www.themoviedb.org/")!) {
-                    Image("tmdbLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100)
-                        .padding()
+                HStack {
+                    Spacer()
+                    
+                    Link("kindofawesome.com", destination: URL(string: "https://kindofawesome.com/")!)
+                        .buttonStyle(.bordered)
+                    
+                    Spacer()
                 }
-                .buttonStyle(.bordered)
                 
-                Spacer()
-            }
-            HStack(alignment: .center) {
-                Spacer()
                 
-                Link(destination: URL(string: "https://www.justwatch.com//")!) {
-                    Image("justwatchLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 125)
-                        .padding()
-                }
+                Text("Search provided by The Movie Database, and streaming data by Just Watch.")
+                    .padding(.horizontal)
+                    .padding(.top)
+                
+                HStack {
+                    Spacer()
+                    
+                    Link(destination: URL(string: "https://www.themoviedb.org/")!) {
+                        Image("tmdbLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                            .padding()
+                    }
                     .buttonStyle(.bordered)
+                    
+                    Spacer()
+                }
+                HStack(alignment: .center) {
+                    Spacer()
+                    
+                    Link(destination: URL(string: "https://www.justwatch.com//")!) {
+                        Image("justwatchLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 125)
+                            .padding()
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Spacer()
+                }
+                
+                Text("Current region: \(Constants.watchRegion)")
+                    .padding()
+                
+                Text("Nota Bene: Media lists are stored locally on your phone. Backups are currently not available.")
+                    .padding()
+                
+                Button("Restore to factory settings", action: promptToRestore)
+                    .padding()
                 
                 Spacer()
             }
-            
-            Text("Current region: \(Constants.watchRegion)")
-                .padding()
-            
-            Text("Nota Bene: Media lists are stored locally on your phone. Backups are currently not available.")
-                .padding()
-            
-            Button("Restore to factory settings", action: promptToRestore)
-                .padding()
-            
-            Spacer()
         }
         .navigationTitle("About")
-        .alert("Are you sure you want to clear the watchlist and the watched list?", isPresented: $displayPrompt) {
+        .alert("Are you sure you want to clear everything, everywhere, all at once? Including your watchlist and your watched list?", isPresented: $displayPrompt) {
             Button(role: .destructive) {
                 Task.init {
                     await Storage.shared.restoreToFactorySettings()

@@ -23,12 +23,12 @@ struct MediaListRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(media.title ?? media.name ?? "")
-                    .font(.system(size: 20))
+                    .font(.subheader)
                     .multilineTextAlignment(.leading)
                 
                 if let year = media.year {
                     Text("(\(year))")
-                        .font(.system(size: 14))
+                        .font(.body)
                         .foregroundColor(.gray)
                 }
             }

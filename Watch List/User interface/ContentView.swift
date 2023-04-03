@@ -27,8 +27,13 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: selectionBinding) {
             
+            
+            // WATCH LIST
+            
             NavigationStack(path: $presentedMedia[1]) {
-                MediaListView(mediaState: .watchlist)
+                MediaListView(mediaState: .watchlist) { (media) in
+                    presentedMedia[1] = [media]
+                }
             }
             .tabItem {
                 Image(systemName: MediaState.watchlist.imageName)
@@ -36,14 +41,24 @@ struct ContentView: View {
             }
             .tag(1)
             
+            
+            
+            // WATCHED
+            
             NavigationStack(path: $presentedMedia[2]) {
-                MediaListView(mediaState: .watched)
+                MediaListView(mediaState: .watched) { (media) in
+                    presentedMedia[2] = [media]
+                }
             }
             .tabItem {
                 Image(systemName: MediaState.watched.imageName)
                 Text(MediaState.watched.title)
             }
             .tag(2)
+            
+            
+            
+            // SEARCH
             
             NavigationStack(path: $presentedMedia[3]) {
                 SearchView()
@@ -54,8 +69,12 @@ struct ContentView: View {
             }
             .tag(3)
             
+            
+            // ABOUT
+            
             NavigationStack {
                 AboutView()
+//                FontsView()
             }
             .tabItem{
                 Image(systemName: "info.circle")
@@ -63,7 +82,6 @@ struct ContentView: View {
             }
             .tag(4)
         }
-       
     }
 }
 

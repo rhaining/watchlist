@@ -12,8 +12,8 @@ struct WhatsNextView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Okay, what's next?")
-                .fontWeight(.black)
+            Text("Okay? Okay. What's next?")
+                .font(.header)
             
             ScrollView(.horizontal, showsIndicators: true) {
                 HStack {
@@ -29,8 +29,8 @@ struct WhatsNextView: View {
                                                   title: whatsNextItem.media.name,
                                                   caption: .episodeDescriptor(season: tvEp.seasonNumber, episode: tvEp.episodeNumber)
                                     )
-                                } else if let movie = whatsNextItem.media, movie.mediaType == .movie {
-                                    whatsNextCell(imageUrl: movie.posterUrl,
+                                } else if whatsNextItem.media.mediaType == .movie {
+                                    whatsNextCell(imageUrl: whatsNextItem.media.posterUrl,
                                                   title: whatsNextItem.media.title,
                                                   caption: movieProgressCaption(for: whatsNextItem)
                                     )
@@ -61,6 +61,7 @@ struct WhatsNextView: View {
                     .frame(width: 90, height: 90)
             }
             Text(title ?? "")
+                .font(.subheader)
                 .lineLimit(1)
             Text(caption ?? "")
                 .font(.caption)

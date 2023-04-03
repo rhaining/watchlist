@@ -43,6 +43,7 @@ struct MediaView: View {
                     Button(showCompactOverview() ? "▹" : "▿", action: { exposeFullOverview = !exposeFullOverview })
                     
                     Text(showCompactOverview() ? overview.prefix(150) + "…" : overview)
+                        .font(.body)
                         .foregroundColor(.white)
                         .shadow(color: .black, radius: 5)
                         .onTapGesture { exposeFullOverview = !exposeFullOverview }
@@ -69,15 +70,19 @@ struct MediaView: View {
                 if let whatsNext = storage.getNextEpisode(tvShow: media) {
                     VStack(spacing: 4) {
                         Text("What's next: \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber))")
+                            .font(.subheader)
                             .fontWeight(.semibold)
                         Text("“\(whatsNext.name ?? "-")”")
+                            .font(.body)
                             .lineLimit(1)
                         Button("Mark \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) as watched", action: markNextEpisodeAsWhatsNext)
+                            .font(.subheader)
                             .buttonStyle(.borderedProminent)
                     }
                 }
                 if let watchedAt = media.watchedAt, mediaState == .watched {
                     Text("Watched on: " + dateFormatter.string(from: watchedAt))
+                        .font(.body)
                 }
             }
             .foregroundColor(.white)
@@ -118,7 +123,7 @@ struct MediaView: View {
             MediaStreamingView(media: media)
         }
         .navigationTitle(media.title ?? media.name ?? "")
-        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(.visible, for: .tabBar)
         .navigationBarItems(
             trailing:
                 HStack {
@@ -163,6 +168,7 @@ struct MediaView: View {
             updateMediaState()
             loadDetails()
         })
+
     }
     
     private func markNextEpisodeAsWhatsNext() {

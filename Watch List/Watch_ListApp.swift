@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct Watch_ListApp: App {
+    
+    init() {
+        CustomAppearance.setup()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
