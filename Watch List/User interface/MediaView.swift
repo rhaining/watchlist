@@ -133,8 +133,12 @@ struct MediaView: View {
                         .blur(radius: 4)
                         .overlay(Color.black.opacity(0.6))
                 } placeholder: {
-                    Color.purple.opacity(0.01)
+                    Color.black.opacity(0.3)
+                        .scaledToFill()
                 }
+            } else {
+                Color.black.opacity(0.6)
+                    .scaledToFill()
             }
         }
         .overlay {
