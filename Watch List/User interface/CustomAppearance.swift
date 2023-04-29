@@ -14,7 +14,7 @@ struct CustomAppearance {
         
         // Apply a red background.
         customNavBarAppearance.configureWithTransparentBackground()
-        customNavBarAppearance.backgroundColor = .systemRed
+        customNavBarAppearance.backgroundColor = .systemTeal
         
         
         // Apply white colored normal and large titles.
@@ -52,7 +52,7 @@ struct CustomAppearance {
         let customTabBarAppearance = UITabBarAppearance()
         
         customTabBarAppearance.configureWithTransparentBackground()
-        customTabBarAppearance.backgroundColor = .systemRed
+        customTabBarAppearance.backgroundColor = .systemTeal
 
         let barButtonItemAppearance = UITabBarItemAppearance(style: .stacked)
         barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]

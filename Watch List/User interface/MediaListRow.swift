@@ -28,7 +28,7 @@ struct MediaListRow: View {
                 
                 if let year = media.year {
                     Text("(\(year))")
-                        .font(.body)
+                        .font(.primary)
                         .foregroundColor(.gray)
                 }
             }

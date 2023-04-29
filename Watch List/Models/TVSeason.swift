@@ -29,5 +29,5 @@ extension TVSeason {
     }
 }
 extension TVSeason {
-    static let communityOne = TVSeason(airDate: Date(timeIntervalSince1970: 30413949), episodeCount: 14, id: 129, name: "Community season 1", overview: "this is an overview", posterPath: nil, seasonNumber: 1)
+    static let communityOne = TVSeason(airDate: Date(timeIntervalSince1970: 30413949), episodeCount: 14, id: 129, name: "Community season 1", overview: "this is an overview", posterPath: "/tGmCxGkVMOqig2TrbXAsE9dOVvX.jpg", seasonNumber: 1)
 }

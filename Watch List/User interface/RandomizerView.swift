@@ -31,13 +31,21 @@ struct RandomizerView: View {
                                     .scaledToFit()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(height: 300)
+                                    .cornerRadius(10)
                             } placeholder: {
-                                Color.purple.opacity(0.01)
+                                Color.white.opacity(0.1)
+                                    .frame(width: 150, height: 300)
+                                    .cornerRadius(10)
                             }
                         }
-                        
+         
+        
                         Text(media?.name ?? media?.title ?? "")
                             .font(.system(.title))
+                            .padding()
+                            .background(Color.white.opacity(0.8))
+                            .cornerRadius(10)
+                        
                     }
                 }
                 
@@ -45,10 +53,13 @@ struct RandomizerView: View {
             }
             Spacer()
         }
+        .background(AnimatedGradientView())
         .overlay(alignment: .topTrailing) {
             Button(action: randomize) {
                 Image(systemName: "wand.and.stars")
                     .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
             }
             .padding()
         }
@@ -56,6 +67,9 @@ struct RandomizerView: View {
             Button("Cancel") {
                 dismiss()
             }
+            .padding()
+            .background(Color.white.opacity(0.8))
+            .cornerRadius(10)
             .padding()
         }
         .onAppear(perform: randomize)

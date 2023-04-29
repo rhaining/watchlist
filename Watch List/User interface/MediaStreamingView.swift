@@ -15,13 +15,13 @@ struct MediaStreamingView: View {
         VStack(alignment: .leading) {
             if let watchProviderRegion = watchProviderRegion {
                     if let providers = watchProviderRegion.flatrate {
-                        MediaWatchProviderSectionView(title: "Available to stream:", watchProviders: providers)
+                        MediaWatchProviderSectionView(title: "Available to stream", watchProviders: providers, expandable: false)
                     }
                     if let providers = watchProviderRegion.rent {
-                        MediaWatchProviderSectionView(title: "Available to rent:", watchProviders: providers)
+                        MediaWatchProviderSectionView(title: "Available to rent", watchProviders: providers, expandable: true)
                     }
                     if let providers = watchProviderRegion.buy {
-                        MediaWatchProviderSectionView(title: "Available to buy:", watchProviders: providers)
+                        MediaWatchProviderSectionView(title: "Available to buy", watchProviders: providers, expandable: true)
                     }
                
                 
@@ -30,7 +30,7 @@ struct MediaStreamingView: View {
                     .foregroundColor(.gray)
                     .shadow(color: .black, radius: 5)
                     .italic()
-                    .padding(.vertical, 10)
+                    .padding(10)
             } else {
                 Text("Not currently available to stream")
                     .italic()

@@ -13,7 +13,7 @@ struct AboutView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("TV Plus Plus is brought to you by Robert Tolar Haining.")
+                Text("What's Next+ is brought to you by Robert Tolar Haining.")
                     .padding()
                 
                 Text("Check out more projects at:")

@@ -27,27 +27,16 @@ struct MediaView: View {
         df.timeStyle = .none
         return df
     }()
-    
-    func showCompactOverview() -> Bool {
-        if let overview = media.overview {
-            return !exposeFullOverview && overview.count > 150;
-        } else {
-            return !exposeFullOverview
-        }
-    }
+
     
     var body: some View {
         ScrollView {
             HStack(alignment: .top) {
                 if let overview = media.overview {
-                    Button(showCompactOverview() ? "▹" : "▿", action: { exposeFullOverview = !exposeFullOverview })
-                    
-                    Text(showCompactOverview() ? overview.prefix(150) + "…" : overview)
-                        .font(.body)
+                    Text(overview)
+                        .font(.primary)
                         .foregroundColor(.white)
                         .shadow(color: .black, radius: 5)
-                        .onTapGesture { exposeFullOverview = !exposeFullOverview }
-
                 } else {
                     Spacer()
                 }
@@ -57,14 +46,14 @@ struct MediaView: View {
                             image
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 100)
+                                .frame(height: 150)
                         } placeholder: {
                             Color.purple.opacity(0.01)
                         }
                     }
                 }
             }
-                .padding()
+            .padding()
             
             VStack(spacing: 10) {
                 if let whatsNext = storage.getNextEpisode(tvShow: media) {
@@ -73,7 +62,7 @@ struct MediaView: View {
                             .font(.subheader)
                             .fontWeight(.semibold)
                         Text("“\(whatsNext.name ?? "-")”")
-                            .font(.body)
+                            .font(.primary)
                             .lineLimit(1)
                         Button("Mark \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) as watched", action: markNextEpisodeAsWhatsNext)
                             .font(.subheader)
@@ -82,7 +71,7 @@ struct MediaView: View {
                 }
                 if let watchedAt = media.watchedAt, mediaState == .watched {
                     Text("Watched on: " + dateFormatter.string(from: watchedAt))
-                        .font(.body)
+                        .font(.primary)
                 }
             }
             .foregroundColor(.white)
@@ -93,7 +82,7 @@ struct MediaView: View {
                 if let details = mediaDetails ?? media.details {
                     switch details {
                         case .movie(let details):
-                                MovieProgressView(movie: media, details: details)
+                            MovieProgressView(movie: media, details: details)
                             
                         case .tv(let details):
                             TVSeasonsView(media: media, tvDetails: details)
@@ -122,14 +111,14 @@ struct MediaView: View {
             
             MediaStreamingView(media: media)
         }
-        .navigationTitle(media.title ?? media.name ?? "")
-        .toolbarBackground(.visible, for: .tabBar)
+        .navigationTitle(media.displayTitle!)
         .navigationBarItems(
             trailing:
                 HStack {
                     if let year = media.year {
                         Text(year)
-                            .font(.system(size: 13))
+                            .font(.little)
+                            .foregroundColor(.white)
                     }
                     ShareLink(item: URL(string: "https://www.themoviedb.org/\(media.mediaType.rawValue)/\(media.id)")!)
                     
@@ -248,7 +237,7 @@ struct MediaView: View {
         }
         .disabled(mediaState == .watchlist)
         .buttonStyle(.bordered)
-        .background(Color.white.cornerRadius(10))
+        .background(Color.white.opacity(0.9).cornerRadius(10))
     }
     
     
@@ -270,7 +259,7 @@ struct MediaView: View {
         }
         .disabled(mediaState == .watched)
         .buttonStyle(.bordered)
-        .background(Color.white.cornerRadius(10))
+        .background(Color.white.opacity(0.9).cornerRadius(10))
 
     }
     
@@ -283,15 +272,15 @@ struct MediaView: View {
         }) {
             HStack {
                 Image(systemName: "trash")
-                Text("Remove")
+                Text("Remove from Watchlist")
                     .font(.system(size: 12))
             }
             .padding(5)
-            .foregroundColor(mediaState == nil ? .gray : .blue)
+            .foregroundColor(mediaState == nil ? .gray : .white)
         }
         .disabled(mediaState == nil)
         .buttonStyle(.bordered)
-        .background(Color.white.cornerRadius(10))
+        .background(Color.white.opacity(0.5).cornerRadius(10))
     }    
     
     private func loadDetails() {

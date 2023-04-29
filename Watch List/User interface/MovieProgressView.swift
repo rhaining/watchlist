@@ -22,11 +22,12 @@ struct MovieProgressView: View {
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(.white)
-                .frame(width: 50, height: 50)
+                .frame(width: 70, height: 70)
+            
             VStack(alignment: .leading) {
                 if let runtime = details.readableRuntime() {
                     
-                    Text("Runtime: \(runtime)")
+                    Text("Runtime – \(runtime)")
                         .foregroundColor(.white)
                         .shadow(color: .black, radius: 5)
                     
@@ -50,7 +51,7 @@ struct MovieProgressView: View {
                                 .foregroundColor(.white)
                         }
                         
-                        Button("Update") {
+                        Button("Set Progress") {
                             editProgress = true
                         }
                         .buttonStyle(.borderedProminent)

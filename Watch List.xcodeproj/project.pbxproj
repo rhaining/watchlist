@@ -17,6 +17,7 @@
 		EF49CF77297C817600B5DDD1 /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF75297C817600B5DDD1 /* RemoteImageView.swift */; };
 		EF49CF78297C817600B5DDD1 /* CachedImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF76297C817600B5DDD1 /* CachedImageLoader.swift */; };
 		EF49CF7A297DB58400B5DDD1 /* TMDBCoders.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF79297DB58400B5DDD1 /* TMDBCoders.swift */; };
+		EF55F1B329FD96C6004D5A7D /* AnimatedGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF55F1B229FD96C6004D5A7D /* AnimatedGradientView.swift */; };
 		EFB8BD2E29A3CB9100715579 /* TVEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD2D29A3CB9100715579 /* TVEpisode.swift */; };
 		EFB8BD3029A3D54300715579 /* WhatsNextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD2F29A3D54300715579 /* WhatsNextView.swift */; };
 		EFB8BD3229A3D9F700715579 /* WhatsNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD3129A3D9F700715579 /* WhatsNext.swift */; };
@@ -80,6 +81,7 @@
 		EF49CF75297C817600B5DDD1 /* RemoteImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
 		EF49CF76297C817600B5DDD1 /* CachedImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImageLoader.swift; sourceTree = "<group>"; };
 		EF49CF79297DB58400B5DDD1 /* TMDBCoders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBCoders.swift; sourceTree = "<group>"; };
+		EF55F1B229FD96C6004D5A7D /* AnimatedGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientView.swift; sourceTree = "<group>"; };
 		EFB8BD2D29A3CB9100715579 /* TVEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVEpisode.swift; sourceTree = "<group>"; };
 		EFB8BD2F29A3D54300715579 /* WhatsNextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNextView.swift; sourceTree = "<group>"; };
 		EFB8BD3129A3D9F700715579 /* WhatsNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNext.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				EFCB767A297611980034CD8B /* AboutView.swift */,
 				EF01B6E329DA4D560019DE8A /* FontsView.swift */,
 				EFB8BD3929A42A1500715579 /* RandomizerView.swift */,
+				EF55F1B229FD96C6004D5A7D /* AnimatedGradientView.swift */,
 			);
 			path = "User interface";
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				EFCB767229760BC40034CD8B /* Media.swift in Sources */,
 				EFFED11729903E15009436B5 /* MediaStreamingView.swift in Sources */,
 				EFCB767E297A0E340034CD8B /* MediaListView.swift in Sources */,
+				EF55F1B329FD96C6004D5A7D /* AnimatedGradientView.swift in Sources */,
 				EFB8BD3029A3D54300715579 /* WhatsNextView.swift in Sources */,
 				EFFED115298B38E1009436B5 /* TVSeason.swift in Sources */,
 				EF01B6E829DA72A00019DE8A /* CustomAppearance.swift in Sources */,
@@ -607,6 +611,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Watch-List-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "What's Next+";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -636,6 +641,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Watch-List-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "What's Next+";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

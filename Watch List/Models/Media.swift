@@ -39,6 +39,8 @@ struct Media: Codable, Identifiable, Equatable, Hashable {
     let name: String?
     let overview: String?
     
+    var displayTitle: String? { return title ?? name }
+    
     let releaseDate: String?
     let firstAirDate: String?
     var year: String? {

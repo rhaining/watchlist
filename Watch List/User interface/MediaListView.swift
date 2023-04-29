@@ -58,6 +58,7 @@ struct MediaListView: View {
         List {
             if mediaList.count == 0 {
                 Text("No items found.")
+                    .padding()
             } else {
                 if mediaState == .watchlist {
                     WhatsNextView()
@@ -111,7 +112,7 @@ struct MediaListView: View {
 
         }
         .navigationTitle(mediaState.title)
-        .navigationBarItems(leading: Image(systemName: mediaState.imageName), trailing: Text("\(mediaList.count) item\(mediaList.count == 1 ? "" : "s")"))
+        .navigationBarItems(leading: Image(systemName: mediaState.imageName), trailing: Text("\(mediaList.count) saved"))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()

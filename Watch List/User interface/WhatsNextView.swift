@@ -18,14 +18,23 @@ struct WhatsNextView: View {
             ScrollView(.horizontal, showsIndicators: true) {
                 HStack {
                     ForEach(storage.whatsNext.filter({ wn in
-                        return storage.watchlist.contains(wn.media)
+                        if storage.watchlist.contains(wn.media) {
+                            if let airDate = wn.tvEp?.airDate {
+                                let twelveHours = TimeInterval(12 * 60 * 60)
+                                return airDate.timeIntervalSinceNow < twelveHours
+                            } else {
+                                return true
+                            }
+                        } else {
+                            return false
+                        }
                     }).sorted(by: { a, b in
                         return a.updatedAt > b.updatedAt
                     }), id: \.self) { whatsNextItem in
                         NavigationLink(value: whatsNextItem.media) {
                             VStack {
                                 if let tvEp = whatsNextItem.tvEp {
-                                    whatsNextCell(imageUrl: tvEp.stillUrl ?? whatsNextItem.media.thumbnailUrl,
+                                    whatsNextCell(imageUrl: whatsNextItem.media.thumbnailUrl,
                                                   title: whatsNextItem.media.name,
                                                   caption: .episodeDescriptor(season: tvEp.seasonNumber, episode: tvEp.episodeNumber)
                                     )
@@ -36,8 +45,8 @@ struct WhatsNextView: View {
                                     )
                                 }
                             }
-                            .frame(width: 90)
-                            .padding(.bottom)
+                            .frame(width: 110)
+                            .padding(.bottom, 5)
                         }
                     }
                 }
@@ -58,13 +67,13 @@ struct WhatsNextView: View {
             if let imageUrl = imageUrl {
                 RemoteImageView(imageURL: imageUrl)
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 90, height: 90)
+                    .frame(width: 100, height: 120)
             }
             Text(title ?? "")
                 .font(.subheader)
                 .lineLimit(1)
             Text(caption ?? "")
-                .font(.caption)
+                .font(.little)
         }
     }
 }

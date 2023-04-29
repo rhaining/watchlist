@@ -33,5 +33,5 @@ extension TVSeasonDetails {
     }
 }
 extension TVSeasonDetails {
-    static let communityOne = TVSeasonDetails(airDate: Date(timeIntervalSince1970: 3049324), episodes: [.communityOne], name: "Community One", overview: "This is an overview", id: 10, posterPath: "/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg", seasonNumber: 1)
+    static let communityOne = TVSeasonDetails(airDate: Date(timeIntervalSince1970: 3049324), episodes: [.communityOne, .communityOne, .communityOne, .communityOne], name: "Community One", overview: "This is an overview", id: 10, posterPath: "/vDGr1YdrlfbU9wxTOdpf3zChmv9.jpg", seasonNumber: 1)
 }
