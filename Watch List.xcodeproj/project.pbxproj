@@ -18,6 +18,7 @@
 		EF49CF78297C817600B5DDD1 /* CachedImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF76297C817600B5DDD1 /* CachedImageLoader.swift */; };
 		EF49CF7A297DB58400B5DDD1 /* TMDBCoders.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF79297DB58400B5DDD1 /* TMDBCoders.swift */; };
 		EF55F1B329FD96C6004D5A7D /* AnimatedGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF55F1B229FD96C6004D5A7D /* AnimatedGradientView.swift */; };
+		EF55F1B729FDB5A7004D5A7D /* PersonCreditsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF55F1B629FDB5A7004D5A7D /* PersonCreditsResponse.swift */; };
 		EFB8BD2E29A3CB9100715579 /* TVEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD2D29A3CB9100715579 /* TVEpisode.swift */; };
 		EFB8BD3029A3D54300715579 /* WhatsNextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD2F29A3D54300715579 /* WhatsNextView.swift */; };
 		EFB8BD3229A3D9F700715579 /* WhatsNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB8BD3129A3D9F700715579 /* WhatsNext.swift */; };
@@ -82,6 +83,7 @@
 		EF49CF76297C817600B5DDD1 /* CachedImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImageLoader.swift; sourceTree = "<group>"; };
 		EF49CF79297DB58400B5DDD1 /* TMDBCoders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBCoders.swift; sourceTree = "<group>"; };
 		EF55F1B229FD96C6004D5A7D /* AnimatedGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientView.swift; sourceTree = "<group>"; };
+		EF55F1B629FDB5A7004D5A7D /* PersonCreditsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditsResponse.swift; sourceTree = "<group>"; };
 		EFB8BD2D29A3CB9100715579 /* TVEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVEpisode.swift; sourceTree = "<group>"; };
 		EFB8BD2F29A3D54300715579 /* WhatsNextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNextView.swift; sourceTree = "<group>"; };
 		EFB8BD3129A3D9F700715579 /* WhatsNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNext.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				EFCB766D2975E9540034CD8B /* Storage.swift */,
 				EFB8BD3129A3D9F700715579 /* WhatsNext.swift */,
 				EFCB766F29760BB30034CD8B /* MediaResponse.swift */,
+				EF55F1B629FDB5A7004D5A7D /* PersonCreditsResponse.swift */,
 				EFCB767129760BC40034CD8B /* Media.swift */,
 				EFFED110298B33AF009436B5 /* MediaDetails.swift */,
 				EFFED10E298B2E02009436B5 /* MovieDetails.swift */,
@@ -412,6 +415,7 @@
 			files = (
 				EFCB767929760C040034CD8B /* WatchProvider.swift in Sources */,
 				EF49CF7A297DB58400B5DDD1 /* TMDBCoders.swift in Sources */,
+				EF55F1B729FDB5A7004D5A7D /* PersonCreditsResponse.swift in Sources */,
 				EF49CF6F297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift in Sources */,
 				EF01B6E429DA4D560019DE8A /* FontsView.swift in Sources */,
 				EFCB766C2975DF0B0034CD8B /* Constants.swift in Sources */,
