@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WhatsNextView: View {
     @ObservedObject private var storage = Storage.shared
+    private let whatsNextHelper = WhatsNextHelper()
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -36,16 +37,18 @@ struct WhatsNextView: View {
                                 if let tvEp = whatsNextItem.tvEp {
                                     whatsNextCell(imageUrl: whatsNextItem.media.thumbnailUrl,
                                                   title: whatsNextItem.media.name,
-                                                  caption: .episodeDescriptor(season: tvEp.seasonNumber, episode: tvEp.episodeNumber)
+                                                  caption: .episodeDescriptor(season: tvEp.seasonNumber, episode: tvEp.episodeNumber),
+                                                  media: whatsNextItem.media
                                     )
                                 } else if whatsNextItem.media.mediaType == .movie {
                                     whatsNextCell(imageUrl: whatsNextItem.media.posterUrl,
                                                   title: whatsNextItem.media.title,
-                                                  caption: movieProgressCaption(for: whatsNextItem)
+                                                  caption: movieProgressCaption(for: whatsNextItem),
+                                                  media: whatsNextItem.media
                                     )
                                 }
                             }
-                            .frame(width: 110)
+                            .frame(width: 130)
                             .padding(.bottom, 5)
                         }
                     }
@@ -62,19 +65,33 @@ struct WhatsNextView: View {
         }
     }
     
-    func whatsNextCell(imageUrl: URL?, title: String?, caption: String?) -> some View {
+    func whatsNextCell(imageUrl: URL?, title: String?, caption: String?, media: Media) -> some View {
         VStack {
             if let imageUrl = imageUrl {
                 RemoteImageView(imageURL: imageUrl)
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 120)
+                    .frame(width: 130)
             }
             Text(title ?? "")
-                .font(.subheader)
+                .font(.little)
                 .lineLimit(1)
             Text(caption ?? "")
                 .font(.little)
         }
+//        This wasn't quite acting right
+//        .contextMenu {
+//            Button(action: {
+//                Task.init {
+//                    whatsNextHelper.markAsWatched(media: media)
+//                }
+//            }) {
+//                HStack {
+//                    Image(systemName: MediaState.watched.imageName)
+//                    Text("Mark as watched")
+//                        .font(.system(size: 18))
+//                }
+//            }
+//        }
     }
 }
 

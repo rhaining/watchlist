@@ -11,6 +11,7 @@
 		EF01B6E629DA4F870019DE8A /* Font~Watchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF01B6E529DA4F870019DE8A /* Font~Watchlist.swift */; };
 		EF01B6E829DA72A00019DE8A /* CustomAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF01B6E729DA72A00019DE8A /* CustomAppearance.swift */; };
 		EF034A8929D9ED64001750A6 /* TmdbError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF034A8829D9ED64001750A6 /* TmdbError.swift */; };
+		EF119C5829FECFF0005CAF44 /* WhatsNextHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF119C5729FECFF0005CAF44 /* WhatsNextHelper.swift */; };
 		EF49CF6F297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */; };
 		EF49CF71297C739200B5DDD1 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF70297C739200B5DDD1 /* MediaType.swift */; };
 		EF49CF73297C777000B5DDD1 /* MediaListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF49CF72297C777000B5DDD1 /* MediaListRow.swift */; };
@@ -76,6 +77,7 @@
 		EF01B6E529DA4F870019DE8A /* Font~Watchlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font~Watchlist.swift"; sourceTree = "<group>"; };
 		EF01B6E729DA72A00019DE8A /* CustomAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppearance.swift; sourceTree = "<group>"; };
 		EF034A8829D9ED64001750A6 /* TmdbError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbError.swift; sourceTree = "<group>"; };
+		EF119C5729FECFF0005CAF44 /* WhatsNextHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNextHelper.swift; sourceTree = "<group>"; };
 		EF49CF6E297C422D00B5DDD1 /* MediaWatchProviderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaWatchProviderSectionView.swift; sourceTree = "<group>"; };
 		EF49CF70297C739200B5DDD1 /* MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 		EF49CF72297C777000B5DDD1 /* MediaListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaListRow.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				EFB8BD3729A4200F00715579 /* TmdbApi.swift */,
 				EF034A8829D9ED64001750A6 /* TmdbError.swift */,
 				EF01B6E529DA4F870019DE8A /* Font~Watchlist.swift */,
+				EF119C5729FECFF0005CAF44 /* WhatsNextHelper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				EFFED113298B388B009436B5 /* TVDetails.swift in Sources */,
 				EFCB76682975D3310034CD8B /* SearchView.swift in Sources */,
 				EFFED10F298B2E02009436B5 /* MovieDetails.swift in Sources */,
+				EF119C5829FECFF0005CAF44 /* WhatsNextHelper.swift in Sources */,
 				EF49CF77297C817600B5DDD1 /* RemoteImageView.swift in Sources */,
 				EFCB763E2975D2F00034CD8B /* Watch_ListApp.swift in Sources */,
 				EFCB767029760BB30034CD8B /* MediaResponse.swift in Sources */,

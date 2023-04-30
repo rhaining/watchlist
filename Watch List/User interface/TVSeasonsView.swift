@@ -148,7 +148,7 @@ struct TVSeasonsView: View {
     }
     
     private func updateSelectedEpisode() {
-        guard let expandedSeason = expandedSeason else { return }
+        guard expandedSeason != nil else { return }
         
         selectedEpisode = Storage.shared.getNextEpisode(tvShow: media);
     }

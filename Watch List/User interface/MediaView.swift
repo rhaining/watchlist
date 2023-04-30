@@ -15,6 +15,7 @@ struct MediaView: View {
     @State private var exposeFullOverview = false
     @State private var mediaState: MediaState?
     @State private var enableOverlay: Bool = false
+    private let whatsNextHelper = WhatsNextHelper()
     
     init(media: Media) {
         self.media = media
@@ -64,7 +65,9 @@ struct MediaView: View {
                         Text("“\(whatsNext.name ?? "-")”")
                             .font(.primary)
                             .lineLimit(1)
-                        Button("Mark \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) as watched", action: markNextEpisodeAsWhatsNext)
+                        Button("Mark \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) as watched") {
+                            whatsNextHelper.markAsWatched(media: media)
+                        }
                             .font(.subheader)
                             .buttonStyle(.borderedProminent)
                     }
@@ -164,49 +167,6 @@ struct MediaView: View {
 
     }
     
-    private func markNextEpisodeAsWhatsNext() {
-        guard let tvEp = storage.getNextEpisode(tvShow: media),
-            let seasonNumber = tvEp.seasonNumber else { return }
-        
-        TmdbApi.loadSeason(tvShow: media, seasonNumber: seasonNumber) { result in
-            switch result {
-                case .success(let seasonDetails):
-                    if let episodes = seasonDetails.episodes,
-                       let idx = episodes.firstIndex(of: tvEp){
-                        if Int(idx) + 1 < episodes.count {
-                            let newTvEp = episodes[Int(idx)+1]
-                            Task.init {
-                                await storage.addToWhatsNext(tvShow: media, episode: newTvEp)
-                            }
-                        } else {
-                            TmdbApi.loadSeason(tvShow: media, seasonNumber: seasonNumber+1) { result in
-                                switch result {
-                                    case .success(let seasonDetails):
-                                        if let episodes = seasonDetails.episodes,
-                                           let newTvEp = episodes.first {
-                                            Task.init {
-                                                await storage.addToWhatsNext(tvShow: media, episode: newTvEp)
-                                            }
-                                        }
-                                        
-                                    case .failure(let error):
-                                        if let tmdbError = error as? TmdbError, tmdbError == .seasonNotFound {
-                                            Task.init {
-                                                await storage.removeFromWhatsNext(media: media)
-                                            }
-                                        } else {
-                                            NSLog("unknown error \(error)")
-                                        }
-                                }
-                            }
-                        }
-                    }
-                    
-                case .failure(_):
-                    break
-            }
-        }
-    }
     
     private func toggleOverlay() {
         enableOverlay = !enableOverlay
