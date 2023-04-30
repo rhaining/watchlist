@@ -59,16 +59,17 @@ struct MediaView: View {
             VStack(spacing: 10) {
                 if let whatsNext = storage.getNextEpisode(tvShow: media) {
                     VStack(spacing: 4) {
-                        Text("What's next: \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber))")
+                        Text("What's next: ")
                             .font(.subheader)
                             .fontWeight(.semibold)
-                        Text("“\(whatsNext.name ?? "-")”")
+                        +
+                        Text("\(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) – “\(whatsNext.name ?? "-")”")
                             .font(.primary)
-                            .lineLimit(1)
-                        Button("Mark \(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) as watched") {
+
+                        Button("Mark episode as watched") {
                             whatsNextHelper.markAsWatched(media: media)
                         }
-                            .font(.subheader)
+                            .font(.little)
                             .buttonStyle(.borderedProminent)
                     }
                 }
