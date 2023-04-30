@@ -107,6 +107,7 @@ struct MediaListView: View {
                 }
             }
         }
+        .listStyle(.plain)
         .navigationDestination(for: Media.self) { m in
             MediaView(media: m)
 
