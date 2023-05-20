@@ -78,7 +78,7 @@ struct MediaListView: View {
                 }
                 ForEach(filteredMedia, id: \.id){ m in
                     NavigationLink(value: m) {
-                        MediaListRow(media: m)
+                        MediaListRow(media: m, mediaState: mediaState)
                             .contextMenu {
                                 Button(action: {
                                     Task.init {

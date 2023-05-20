@@ -9,6 +9,15 @@ import SwiftUI
 
 struct MediaListRow: View {
     let media: Media
+    let mediaState: MediaState
+    @ObservedObject private var storage = Storage.shared
+
+    private let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .none
+        return df
+    }()
     
     var body: some View {
         HStack(alignment: .top) {
@@ -31,6 +40,31 @@ struct MediaListRow: View {
                         .font(.primary)
                         .foregroundColor(.gray)
                 }
+                
+          
+                
+                if let whatsNext = storage.getNextEpisode(tvShow: media) {
+                    VStack(alignment: .leading,spacing: 4) {
+                        Text("What's next: ")
+                            .font(.primary)
+                        
+                        Text("\(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) – “\(whatsNext.name ?? "-")”")
+                            .font(.primary)
+                        
+                        if let airDate = whatsNext.airDate {
+                            let airDateStr = DateFormatter.tmdb.string(from: airDate)
+                            let airedVerb = airDate.timeIntervalSinceNow < 0 ? "Aired on" : "Airing on"
+                            Text("\(airedVerb) \(airDateStr)")
+                                .font(.primary)
+                        }
+                    }
+                    .padding(.vertical)
+                }
+                if let watchedAt = media.watchedAt, mediaState == .watched {
+                    Text("Watched on: " + dateFormatter.string(from: watchedAt))
+                        .font(.primary)
+                        .padding(.vertical)
+                }
             }
             
             Spacer()
@@ -40,6 +74,7 @@ struct MediaListRow: View {
 
 struct MediaListRow_Previews: PreviewProvider {
     static var previews: some View {
-        MediaListRow(media: .previewGodfather)
+        MediaListRow(media: .previewGodfather, mediaState: .watchlist)
+        MediaListRow(media: .previewGodfather, mediaState: .watched)
     }
 }
