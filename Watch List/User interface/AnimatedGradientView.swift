@@ -91,12 +91,11 @@ struct AnimatedGradientView: View {
     let gradient2 = Gradient(colors: [.random(), .random()])
     
     var body: some View {
-        
         Rectangle()
             .animatableGradient(fromGradient: gradient1, toGradient: gradient2, progress: progress)
             .ignoresSafeArea()
             .onAppear {
-                withAnimation(.linear(duration: 2.0)) {
+                withAnimation(.easeOut(duration: 2.0)) {
                     self.progress = 1.0
                 }
             }

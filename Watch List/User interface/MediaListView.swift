@@ -127,6 +127,7 @@ struct MediaListView: View {
                 viewMedia(media)
                 randomize = false
             }
+            .background(AnimatedGradientView())
         }
     }
     

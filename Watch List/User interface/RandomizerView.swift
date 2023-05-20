@@ -53,8 +53,7 @@ struct RandomizerView: View {
             }
             Spacer()
         }
-        .background(AnimatedGradientView())
-        .overlay(alignment: .topTrailing) {
+        .overlay(alignment: .bottomLeading) {
             Button(action: randomize) {
                 Image(systemName: "wand.and.stars")
                     .padding()
