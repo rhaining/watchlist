@@ -47,15 +47,18 @@ struct MediaListRow: View {
                     VStack(alignment: .leading,spacing: 4) {
                         Text("What's next: ")
                             .font(.primary)
+                            .foregroundColor(.teal)
                         
                         Text("\(.episodeDescriptor(season: whatsNext.seasonNumber, episode: whatsNext.episodeNumber)) – “\(whatsNext.name ?? "-")”")
                             .font(.primary)
+                            .foregroundColor(.teal)
                         
                         if let airDate = whatsNext.airDate {
                             let airDateStr = DateFormatter.tmdb.string(from: airDate)
                             let airedVerb = airDate.timeIntervalSinceNow < 0 ? "Aired on" : "Airing on"
                             Text("\(airedVerb) \(airDateStr)")
                                 .font(.primary)
+                                .foregroundColor(.teal)
                         }
                     }
                     .padding(.vertical)

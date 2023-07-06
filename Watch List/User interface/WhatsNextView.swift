@@ -21,8 +21,8 @@ struct WhatsNextView: View {
                     ForEach(storage.whatsNext.filter({ wn in
                         if storage.watchlist.contains(wn.media) {
                             if let airDate = wn.tvEp?.airDate {
-                                let twelveHours = TimeInterval(12 * 60 * 60)
-                                return airDate.timeIntervalSinceNow < twelveHours
+                                let oneHour = TimeInterval(60 * 60)
+                                return airDate.timeIntervalSinceNow < oneHour
                             } else {
                                 return true
                             }
