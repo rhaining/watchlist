@@ -139,6 +139,9 @@ struct MediaListView_Previews: PreviewProvider {
             MediaListView(list: [ .previewGodfather ])
         }
         NavigationStack {
+            MediaListView(list: [ ])
+        }
+        NavigationStack {
             MediaListView(mediaState: .watchlist) {(m) in}
         }
         NavigationStack {

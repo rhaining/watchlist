@@ -66,6 +66,7 @@ struct MediaListRow: View {
                 if let watchedAt = media.watchedAt, mediaState == .watched {
                     Text("Watched on: " + dateFormatter.string(from: watchedAt))
                         .font(.primary)
+                        .foregroundColor(.gray)
                         .padding(.vertical)
                 }
             }
