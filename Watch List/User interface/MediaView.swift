@@ -82,6 +82,8 @@ struct MediaView: View {
             .shadow(color: .black, radius: 5)
             .padding()
             
+            VideoView(media: media)
+            
             VStack(spacing: 10) {
                 if let details = mediaDetails ?? media.details {
                     switch details {

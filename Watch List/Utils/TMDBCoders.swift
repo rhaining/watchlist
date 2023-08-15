@@ -13,6 +13,11 @@ extension DateFormatter {
         tmdb.dateFormat = "yyyy-MM-dd"
         return tmdb
     }()
+    static let fullDate: DateFormatter = {
+        let fullDate = DateFormatter()
+        fullDate.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.000'Z'" // 2023-06-16T23:51:55.000Z
+        return fullDate
+    }()
 }
 
 extension JSONDecoder {
@@ -20,6 +25,12 @@ extension JSONDecoder {
         let tmdb = JSONDecoder()
         tmdb.keyDecodingStrategy = .convertFromSnakeCase
         tmdb.dateDecodingStrategy = .formatted(.tmdb)
+        return tmdb
+    }()
+    static let tmdbWithFullDate: JSONDecoder = {
+        let tmdb = JSONDecoder()
+        tmdb.keyDecodingStrategy = .convertFromSnakeCase
+        tmdb.dateDecodingStrategy = .formatted(.fullDate)
         return tmdb
     }()
 }
