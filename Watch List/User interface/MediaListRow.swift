@@ -68,6 +68,13 @@ struct MediaListRow: View {
                         .font(.primary)
                         .foregroundColor(.gray)
                         .padding(.vertical)
+                } else if let releaseDate = media.releaseDate,
+                          let date = DateFormatter.tmdb.date(from: releaseDate),
+                          date.timeIntervalSinceNow > 0 {
+                    Text("To be released on: " + dateFormatter.string(from: date))
+                        .font(.primary)
+                        .foregroundColor(.gray)
+                        .padding(.vertical)
                 }
             }
             
