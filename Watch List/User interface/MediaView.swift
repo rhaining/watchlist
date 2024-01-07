@@ -32,6 +32,20 @@ struct MediaView: View {
     
     var body: some View {
         ScrollView {
+            if let posterUrl = media.backdropUrl ?? media.posterUrl {
+                AsyncImage(url: posterUrl){ image in
+                    image
+                        .resizable()
+                        
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: 150)
+                        .clipped()
+                        .background(Color.black.opacity(0.6))
+                } placeholder: {
+                    Color.black.opacity(0.3)
+                        .scaledToFill()
+                }
+            }
             HStack(alignment: .top) {
                 if let overview = media.overview {
                     Text(overview)
@@ -80,23 +94,9 @@ struct MediaView: View {
             }
             .foregroundColor(.white)
             .shadow(color: .black, radius: 5)
-            .padding()
+//            .padding()
             
-            VideoView(media: media)
             
-            VStack(spacing: 10) {
-                if let details = mediaDetails ?? media.details {
-                    switch details {
-                        case .movie(let details):
-                            MovieProgressView(movie: media, details: details)
-                            
-                        case .tv(let details):
-                            TVSeasonsView(media: media, tvDetails: details)
-                    }
-                }
-            }
-            .padding()
-
             if let mediaState = mediaState {
                 Group {
                     Text("Currently saved to ")
@@ -115,6 +115,22 @@ struct MediaView: View {
             removeMediaButton
                 .padding(.bottom)
             
+            VStack(spacing: 10) {
+                if let details = mediaDetails ?? media.details {
+                    switch details {
+                        case .movie(let details):
+                            MovieProgressView(movie: media, details: details)
+                            
+                        case .tv(let details):
+                            TVSeasonsView(media: media, tvDetails: details)
+                    }
+                }
+            }
+            .padding()
+            
+
+            VideoView(media: media)
+
             MediaStreamingView(media: media)
         }
         .navigationTitle(media.displayTitle!)
@@ -131,21 +147,8 @@ struct MediaView: View {
                 }
         )
         .background{
-            if let posterUrl = media.backdropUrl ?? media.posterUrl {
-                AsyncImage(url: posterUrl){ image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .blur(radius: 4)
-                        .overlay(Color.black.opacity(0.6))
-                } placeholder: {
-                    Color.black.opacity(0.3)
-                        .scaledToFill()
-                }
-            } else {
-                Color.black.opacity(0.6)
-                    .scaledToFill()
-            }
+            Color.black.opacity(0.8)
+                .scaledToFill()
         }
         .overlay {
             if enableOverlay, let posterUrl = media.originalPosterUrl {
